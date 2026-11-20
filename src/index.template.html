@@ -1,0 +1,979 @@
+<!DOCTYPE html>
+<html lang="zh-Hans" data-theme="paper">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>牙牌神数 · 三十二骨牌三阶占验</title>
+<meta name="description" content="《牙牌神数》一百二十五数在线占验：32 张牙牌一字排开，三十滑窗计开，连排三次得始中末。">
+<style>
+/* ============================ 主题 ============================ */
+:root{
+  --paper:#f2e8d5; --paper-2:#e9dcc4; --card:#fbf5e7; --ink:#2a2419; --ink-2:#5b5140;
+  --ink-3:#8b7f68; --line:#d6c6a5; --line-2:#c4b28c;
+  --gold:#9a7b3f; --gold-2:#c8a55c; --cinnabar:#a8332a; --cinnabar-2:#c9503f;
+  --green:#4a6b4e; --shadow:0 2px 14px rgba(74,58,30,.10);
+  --tile-w:34px; --tile-h:62px; --radius:10px;
+  --serif:"Songti SC","STSong","Source Han Serif SC","Noto Serif SC","SimSun",serif;
+  --kai:"Kaiti SC","STKaiti","KaiTi","Noto Serif SC",serif;
+}
+html[data-theme="night"]{
+  --paper:#14120f; --paper-2:#1b1815; --card:#1e1a16; --ink:#e6dcc6; --ink-2:#bdae94;
+  --ink-3:#8a7d67; --line:#3a332a; --line-2:#4c4235;
+  --gold:#c8a55c; --gold-2:#dcc07d; --cinnabar:#c9534a; --cinnabar-2:#e0705f;
+  --green:#8aa880; --shadow:0 2px 18px rgba(0,0,0,.5);
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  font-family:var(--serif); color:var(--ink); background:var(--paper);
+  background-image:radial-gradient(circle at 20% 0%,rgba(255,255,255,.35),transparent 45%),
+                   radial-gradient(circle at 90% 100%,rgba(154,123,63,.10),transparent 40%);
+  -webkit-font-smoothing:antialiased; line-height:1.75; font-size:16px;
+  transition:background .3s,color .3s;
+}
+a{color:var(--cinnabar);text-decoration:none}
+/* ============================ 版式 ============================ */
+.wrap{max-width:1080px;margin:0 auto;padding:0 18px 80px}
+header.top{padding:34px 0 12px;text-align:center;position:relative}
+header.top h1{
+  font-family:var(--kai); font-size:clamp(28px,4.6vw,42px); letter-spacing:.22em;
+  margin:0 0 6px; font-weight:600; color:var(--ink);
+}
+header.top h1 .seal{
+  display:inline-block; font-size:.34em; letter-spacing:.06em; vertical-align:middle;
+  border:1.5px solid var(--cinnabar); color:var(--cinnabar); border-radius:4px;
+  padding:2px 6px; margin-left:10px; transform:translateY(-6px) rotate(-3deg);
+  font-family:var(--serif); line-height:1.3;
+}
+header.top p.sub{margin:0;color:var(--ink-3);font-size:13.5px;letter-spacing:.14em}
+.thread{height:1px;background:linear-gradient(90deg,transparent,var(--line-2),transparent);margin:18px 0 0}
+/* 主题切换 */
+.theme-btn{
+  position:absolute; right:0; top:36px; background:none; border:1px solid var(--line-2);
+  color:var(--ink-2); border-radius:999px; padding:5px 12px; font-size:12.5px; cursor:pointer;
+  font-family:var(--serif); letter-spacing:.1em;
+}
+.theme-btn:hover{border-color:var(--gold);color:var(--gold)}
+/* 导航 */
+nav.tabs{display:flex;gap:4px;justify-content:center;flex-wrap:wrap;margin:22px 0 26px}
+nav.tabs button{
+  background:none;border:none;border-bottom:2px solid transparent;color:var(--ink-2);
+  font-family:var(--kai);font-size:17px;letter-spacing:.16em;padding:7px 16px 6px;cursor:pointer;
+  transition:.2s;
+}
+nav.tabs button:hover{color:var(--ink)}
+nav.tabs button.active{color:var(--cinnabar);border-bottom-color:var(--cinnabar)}
+.panel{display:none;animation:fade .35s ease}
+.panel.active{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+/* 卡片 */
+.card{
+  background:var(--card); border:1px solid var(--line); border-radius:var(--radius);
+  box-shadow:var(--shadow); padding:22px 24px; margin-bottom:20px;
+}
+.card h2{
+  font-family:var(--kai); font-size:19px; letter-spacing:.14em; margin:0 0 14px;
+  font-weight:600; color:var(--ink); display:flex; align-items:center; gap:10px;
+}
+.card h2::before{content:"";width:14px;height:1px;background:var(--cinnabar)}
+.muted{color:var(--ink-3);font-size:13.5px}
+.center{text-align:center}
+/* 输入 */
+.field{display:flex;flex-direction:column;gap:8px;margin-bottom:16px}
+.field label{font-size:13.5px;color:var(--ink-2);letter-spacing:.1em}
+textarea,input[type=text],select{
+  font-family:var(--serif);font-size:15.5px;color:var(--ink);background:var(--paper-2);
+  border:1px solid var(--line);border-radius:8px;padding:11px 13px;width:100%;
+  resize:vertical;outline:none;transition:.2s;
+}
+textarea:focus,input[type=text]:focus,select:focus{border-color:var(--gold);background:var(--card)}
+/* 按钮 */
+.btn{
+  font-family:var(--kai);font-size:16px;letter-spacing:.16em;cursor:pointer;
+  border:1px solid var(--line-2);background:var(--paper-2);color:var(--ink);
+  padding:10px 22px;border-radius:8px;transition:.2s;
+}
+.btn:hover{border-color:var(--gold);color:var(--gold)}
+.btn.primary{
+  background:linear-gradient(180deg,var(--cinnabar-2),var(--cinnabar));color:#fff8ea;
+  border-color:var(--cinnabar);box-shadow:0 3px 12px rgba(168,51,42,.28);
+}
+.btn.primary:hover{filter:brightness(1.08);color:#fff8ea}
+.btn:disabled{opacity:.5;cursor:not-allowed;filter:none}
+.btn.small{padding:6px 14px;font-size:13.5px;letter-spacing:.1em}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.spread{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+/* ============================ 牙牌 ============================ */
+.tile{
+  width:var(--tile-w);height:var(--tile-h);border-radius:5px;background:#f8f1de;
+  border:1px solid #c9b78f;box-shadow:0 1px 3px rgba(60,45,20,.22),inset 0 0 0 1px #fffdf6;
+  display:flex;flex-direction:column;padding:2px;flex:0 0 auto;position:relative;
+  transition:transform .18s,border-color .18s,box-shadow .18s;
+}
+html[data-theme="night"] .tile{background:#efe6d2;border-color:#a08c62}
+.tile .half{flex:1;display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(3,1fr);
+  position:relative;padding:1px}
+.tile .half + .half{border-top:1px solid #d8c9a5}
+.tile i{width:74%;height:74%;border-radius:50%;justify-self:center;align-self:center;
+  background:#241f18;display:block}
+.tile i.red{background:#a8332a}
+.tile.win{
+  border-color:var(--cinnabar);transform:translateY(-5px);
+  box-shadow:0 6px 14px rgba(168,51,42,.30),0 0 0 2px rgba(168,51,42,.35);
+}
+.tile.dim{opacity:.34}
+.tile.reveal{animation:drop .28s ease both}
+@keyframes drop{from{opacity:0;transform:translateY(-10px) rotate(-4deg)}to{opacity:1;transform:none}}
+.deck{display:flex;flex-wrap:nowrap;gap:3px;justify-content:center;min-height:calc(var(--tile-h) + 8px);
+  padding:6px 0 4px;overflow-x:auto;overflow-y:hidden;scrollbar-width:thin}
+.deck .tile{cursor:default}
+#deck .tile{width:26px;height:48px}
+#deck .tile i{width:70%;height:70%}
+@media (max-width:900px){
+  .deck{flex-wrap:wrap}
+  #deck .tile{width:var(--tile-w);height:var(--tile-h)}
+}
+/* 扫描条 */
+.scanline{
+  display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;
+  margin-top:14px;padding-top:12px;border-top:1px dashed var(--line);
+  font-size:14px;color:var(--ink-2);
+}
+.scanline .now{font-family:var(--kai);letter-spacing:.1em;color:var(--ink)}
+.scanline .now b{color:var(--cinnabar);font-size:19px}
+.progress{height:3px;background:var(--line);border-radius:2px;overflow:hidden;margin-top:10px}
+.progress > i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--gold-2),var(--cinnabar));
+  transition:width .12s linear}
+/* 品阶印章 */
+.stamp{
+  display:inline-flex;align-items:center;justify-content:center;min-width:74px;
+  padding:7px 12px;border:1.5px solid currentColor;border-radius:6px;
+  font-family:var(--kai);font-size:19px;letter-spacing:.18em;line-height:1.2;
+}
+.t-上上{color:#8f2f24;background:rgba(168,51,42,.07)}
+.t-上中{color:#a8532a;background:rgba(200,120,60,.07)}
+.t-中平{color:#6b6146;background:rgba(120,105,70,.07)}
+.t-中下{color:#4a5a68;background:rgba(70,90,110,.07)}
+.t-下下{color:#33302c;background:rgba(40,38,34,.07)}
+html[data-theme="night"] .t-上上{color:#e08173}
+html[data-theme="night"] .t-上中{color:#dda06a}
+html[data-theme="night"] .t-中平{color:#cfc39f}
+html[data-theme="night"] .t-中下{color:#9fb6c8}
+html[data-theme="night"] .t-下下{color:#a09a90}
+.trio{display:flex;gap:14px;align-items:center;justify-content:center;flex-wrap:wrap;margin:6px 0 4px}
+.trio .unit{display:flex;flex-direction:column;align-items:center;gap:6px}
+.trio .unit span.lbl{font-size:12px;color:var(--ink-3);letter-spacing:.3em}
+.trio .dot{color:var(--line-2);font-size:20px}
+/* 签面 */
+.oracle-head{text-align:center;border-bottom:1px dashed var(--line);padding-bottom:16px;margin-bottom:18px}
+.oracle-head .no{font-family:var(--kai);font-size:14px;letter-spacing:.24em;color:var(--gold)}
+.oracle-head .motto{
+  font-family:var(--kai);font-size:20px;letter-spacing:.12em;color:var(--cinnabar);
+  margin:10px 0 0;
+}
+.poem{font-family:var(--kai);font-size:20px;line-height:2.1;letter-spacing:.1em;text-align:center;margin:16px 0 4px}
+.poem .line{display:block}
+.sec{margin:18px 0 0}
+.sec .tag{
+  font-family:var(--kai);font-size:14px;letter-spacing:.2em;color:var(--gold);
+  display:inline-block;border-bottom:1px solid var(--line);padding-bottom:3px;margin-bottom:8px;
+}
+.sec p{margin:0;font-size:16px;line-height:2;text-align:justify}
+#res-jie .hit{background:rgba(200,165,92,.22);border-radius:3px;padding:0 2px;box-shadow:inset 0 -1px 0 var(--gold)}
+/* 解读 */
+.narr{display:grid;gap:12px}
+.narr .step{
+  border-left:2px solid var(--line-2);padding:2px 0 2px 14px;
+}
+.narr .step.h{.border-left-color:var(--cinnabar)}
+.narr .step .k{font-family:var(--kai);font-size:14px;letter-spacing:.18em;color:var(--ink-3)}
+.narr .step .v{font-size:15.5px}
+.verdict{
+  margin-top:14px;padding:12px 16px;background:var(--paper-2);border-radius:8px;
+  border:1px solid var(--line);font-size:15.5px;
+}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.chip{font-size:12.5px;padding:2px 9px;border-radius:999px;border:1px solid var(--line-2);color:var(--ink-2)}
+.chip b{color:var(--cinnabar);font-weight:600}
+/* 开数明细 */
+.open-list{display:grid;gap:2px;margin-top:4px}
+.open-row{display:flex;gap:9px;flex-wrap:wrap;align-items:center;padding:7px 0;border-bottom:1px dashed var(--line)}
+.open-row:last-child{border-bottom:none}
+.open-row .lbl{font-family:var(--kai);letter-spacing:.2em;color:var(--ink-3);font-size:13px;flex:0 0 auto}
+.open-row .tot{font-family:var(--kai);color:var(--cinnabar);font-size:15px;flex:0 0 auto}
+.open-row .pat{font-size:12.5px;padding:1px 9px;border-radius:5px;background:var(--paper-2);border:1px solid var(--line);color:var(--ink-2);line-height:1.7}
+.open-row .pat.zero{opacity:.55}
+/* 触机 */
+.prompt-box{
+  font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:12.5px;line-height:1.7;
+  background:var(--paper-2);border:1px solid var(--line);border-radius:8px;padding:12px;
+  white-space:pre-wrap;max-height:280px;overflow:auto;color:var(--ink-2);
+}
+/* 签库 */
+.dict-list{display:grid;gap:8px;max-height:70vh;overflow:auto;padding-right:4px}
+.dict-item{
+  display:flex;justify-content:space-between;gap:12px;align-items:center;
+  padding:9px 12px;border:1px solid var(--line);border-radius:8px;cursor:pointer;background:var(--card);
+  transition:.16s;
+}
+.dict-item:hover{border-color:var(--gold);background:var(--paper-2)}
+.dict-item .l{display:flex;gap:10px;align-items:baseline;min-width:0}
+.dict-item .no{font-family:var(--kai);color:var(--gold);font-size:13px;flex:0 0 auto}
+.dict-item .tt{font-family:var(--kai);letter-spacing:.1em;flex:0 0 auto}
+.dict-item .mm{font-size:12.5px;color:var(--ink-3);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.filter-row{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0 14px}
+.filter-row button{
+  font-family:var(--serif);font-size:13px;padding:4px 12px;border-radius:999px;
+  border:1px solid var(--line-2);background:none;color:var(--ink-2);cursor:pointer;
+}
+.filter-row button.on{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+/* 表格 */
+table{width:100%;border-collapse:collapse;font-size:14px;margin-top:6px}
+th,td{text-align:left;padding:7px 8px;border-bottom:1px solid var(--line)}
+th{font-family:var(--kai);letter-spacing:.1em;color:var(--gold);font-weight:600}
+td b{color:var(--cinnabar)}
+/* 存档 */
+.hist-item{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:10px 0;border-bottom:1px dashed var(--line)}
+.hist-item .q{font-size:14.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hist-item .meta{font-size:12.5px;color:var(--ink-3);font-family:var(--kai);letter-spacing:.08em}
+.empty{text-align:center;color:var(--ink-3);padding:28px 0;font-size:14px}
+/* 提示 */
+.toast{
+  position:fixed;left:50%;bottom:32px;transform:translate(-50%,20px);opacity:0;pointer-events:none;
+  background:var(--ink);color:var(--paper);padding:9px 18px;border-radius:999px;font-size:14px;
+  transition:.28s;z-index:99;letter-spacing:.08em;
+}
+.toast.on{opacity:.95;transform:translate(-50%,0)}
+/* 页脚 */
+footer{text-align:center;color:var(--ink-3);font-size:12.5px;letter-spacing:.1em;padding:26px 0 0;line-height:2}
+@media (max-width:640px){
+  :root{--tile-w:22px;--tile-h:40px}
+  .card{padding:16px 14px}
+  .poem{font-size:18px}
+  .stamp{min-width:60px;font-size:16px;letter-spacing:.1em;padding:6px 9px}
+  header.top .theme-btn{position:static;margin-top:12px}
+  .scanline{font-size:13px}
+}
+@media print{
+  .no-print{display:none!important}
+  body{background:#fff}
+  .card{box-shadow:none;border-color:#ccc}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <h1>牙牌神数<span class="seal">三阶占验</span></h1>
+    <p class="sub">全副牙牌一字排 · 中间看有几多开 · 连排三次分明记 · 上下中平内取裁</p>
+    <div class="thread"></div>
+    <button class="theme-btn no-print" id="theme-btn" type="button">夜读</button>
+  </header>
+
+  <nav class="tabs no-print" id="tabs">
+    <button data-tab="cast" class="active">起占</button>
+    <button data-tab="oracle">签文</button>
+    <button data-tab="dict">签库</button>
+    <button data-tab="rule">原理</button>
+    <button data-tab="hist">存案</button>
+  </nav>
+
+  <!-- ======================= 起占 ======================= -->
+  <section class="panel active" id="panel-cast">
+    <div class="card">
+      <h2>静心起占</h2>
+      <div class="field">
+        <label for="question">心中所问（可选）· 越具体越好</label>
+        <textarea id="question" rows="2" placeholder="例：今年换工作可否？下半年投资是否顺利？"></textarea>
+      </div>
+      <div class="row" style="justify-content:space-between">
+        <div class="muted">
+          品阶口径：
+          <label><input type="radio" name="mode" value="calibrated" checked> 标定（默认）</label>
+          &nbsp;
+          <label><input type="radio" name="mode" value="book"> 原书阈值</label>
+          &nbsp;·&nbsp;
+          <label><input type="checkbox" id="fast" checked> 跳过动画</label>
+        </div>
+        <button class="btn primary" id="btn-cast" type="button">静心起占 · 排三次</button>
+      </div>
+      <div class="progress" id="cast-progress" hidden><i></i></div>
+    </div>
+
+    <div class="card" id="cast-stage" hidden>
+      <div class="spread" style="margin-bottom:10px">
+        <h2 style="margin:0" id="stage-title">第一排 · 始数</h2>
+        <span class="muted" id="stage-hint">三十二张牙牌，一字排开</span>
+      </div>
+      <div class="deck" id="deck"></div>
+      <div class="scanline">
+        <span class="now" id="scan-now">静候洗牌…</span>
+        <span id="scan-total">累计 <b>0</b> 开</span>
+      </div>
+      <div class="row" style="margin-top:12px;justify-content:flex-end">
+        <button class="btn small" id="btn-skip" type="button">跳过本轮动画</button>
+      </div>
+    </div>
+
+    <div class="card" id="rounds-card" hidden>
+      <h2>三排结果</h2>
+      <div class="narr" id="rounds-list"></div>
+    </div>
+  </section>
+
+  <!-- ======================= 签文 ======================= -->
+  <section class="panel" id="panel-oracle">
+    <div class="card" id="oracle-empty">
+      <div class="empty">尚未起占。<br>可至「起占」排三次，或于「签库」点选一百二十五数中任一数。</div>
+    </div>
+
+    <div class="card" id="oracle-card" hidden>
+      <div class="oracle-head">
+        <div class="no" id="res-no">第 001 数</div>
+        <div class="trio" id="res-trio"></div>
+        <div class="motto" id="res-motto"></div>
+      </div>
+      <div class="poem" id="res-poem"></div>
+
+      <div class="sec">
+        <span class="tag">解 曰</span>
+        <p id="res-jie"></p>
+      </div>
+      <div class="sec">
+        <span class="tag">断 曰</span>
+        <p id="res-duan"></p>
+      </div>
+      <div class="sec">
+        <span class="tag">始 中 末 · 触 机</span>
+        <div class="narr" id="res-narr"></div>
+        <div class="verdict" id="res-verdict"></div>
+        <div class="chips" id="res-chips"></div>
+      </div>
+      <div class="sec">
+        <span class="tag">开 数 明 细</span>
+        <div class="open-list" id="res-open"></div>
+      </div>
+      <div class="sec no-print">
+        <span class="tag">触 机 提 示 词</span>
+        <div class="prompt-box" id="res-prompt"></div>
+        <div class="row" style="margin-top:10px">
+          <button class="btn small" id="btn-copy" type="button">复制签文</button>
+          <button class="btn small" id="btn-copy-prompt" type="button">复制提示词</button>
+          <button class="btn small" id="btn-save" type="button">存入案卷</button>
+          <button class="btn small" id="btn-print" type="button">打印／另存 PDF</button>
+          <button class="btn small" id="btn-again" type="button">再占一次</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================= 签库 ======================= -->
+  <section class="panel" id="panel-dict">
+    <div class="card">
+      <h2>一百二十五数</h2>
+      <input type="text" id="dict-search" placeholder="搜号码、品阶（如 上上 中平 上上）、断意、诗曰、解曰……">
+      <div class="filter-row" id="dict-filters"></div>
+      <div class="dict-list" id="dict-list"></div>
+    </div>
+  </section>
+
+  <!-- ======================= 原理 ======================= -->
+  <section class="panel" id="panel-rule">
+    <div class="card">
+      <h2>占法 · 开数九格</h2>
+      <p class="muted">三十二张牙牌（文牌十一种各两张、武牌十张）洗乱，一字排开，取三十个相邻三张的滑动窗口；每窗只记<strong>最高一开</strong>，互不叠加；三十窗之和为一次「总开」。</p>
+      <table>
+        <thead><tr><th style="width:76px">开数</th><th style="width:64px">分值</th><th>成开规则</th></tr></thead>
+        <tbody id="rule-table"></tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <h2>品阶 · 五等</h2>
+      <table>
+        <thead><tr><th>品阶</th><th>标定口径（默认）</th><th>原书阈值</th><th>单次概率（实测）</th></tr></thead>
+        <tbody id="tier-table"></tbody>
+      </table>
+      <p class="muted" style="margin-top:12px">
+        原书以「十二开以上为上上、十至十一开为上中、八至九开为中平、五至七开为中下、一至四开为下下」定品。
+        依九格逐窗计开、三十窗相加之后，实测分布会严重偏上（上上约占 <span id="cal-book">51</span>%）。
+        故默认采用「标定口径」：<strong>开数算法一字不改</strong>，仅把四个品阶切点按其目标概率分位对齐，
+        使单次品阶概率回到 <span id="cal-target">12.5 / 22.2 / 33.4 / 25.9 / 6.0</span>%。可在起占处随时切回「原书阈值」。
+      </p>
+      <div class="prompt-box" id="cal-note" style="max-height:none"></div>
+    </div>
+
+    <div class="card">
+      <h2>铁律 · 防止走样</h2>
+      <ol class="muted" style="line-height:2;padding-left:20px">
+        <li>三十二张牌，取<strong>三十</strong>个三张滑窗（下标 0–29），不多不少。</li>
+        <li>每窗取<strong>最高</strong>一开：不同6 &gt; 五子5 &gt; 合巧4 &gt; 分相/马军/对子/么二三/二三靠3 &gt; 正快1。同窗多格并存时不得累加。</li>
+        <li>「对子」只在<strong>窗内</strong>判定两张完全相同的牌，绝不跨窗、不整副牌去找对。</li>
+        <li>总开为 0 时按原书【求占秘要】须重排，不入品。</li>
+        <li>连排三次：初数＝始（起因本心）、中数＝中（变迁借力）、末数＝末（终局归宿），三数合成一签。</li>
+        <li>同一随机种子必须复现同一局；引擎 Python 与 JS 同口径，21³ 组合全量比对通过。</li>
+      </ol>
+    </div>
+
+    <div class="card">
+      <h2>验证</h2>
+      <div class="prompt-box" id="verify-note" style="max-height:none"></div>
+      <p class="muted" style="margin-top:10px">复现命令：<code>python tests/verify.py</code>（规则单测 + 概率标定 + 125 数覆盖 + 双端一致性）</p>
+    </div>
+  </section>
+
+  <!-- ======================= 存案 ======================= -->
+  <section class="panel" id="panel-hist">
+    <div class="card">
+      <div class="spread">
+        <h2 style="margin:0">案卷</h2>
+        <button class="btn small no-print" id="btn-clear-hist" type="button">清空</button>
+      </div>
+      <div id="hist-list"></div>
+    </div>
+  </section>
+
+  <footer>
+    《牙牌神数》清·何汝柽 撰　岳庆山樵 著　术数西川斋 整理<br>
+    占者诚心求之，则无不应验；如占得之数与所问之事语气未协，当于字句间玩味详测之。
+  </footer>
+</div>
+<div class="toast" id="toast"></div>
+
+<script id="oracle-data" type="application/json">{{DATA_JSON}}</script>
+<script id="calib-data" type="application/json">{{CALIBRATION_JSON}}</script>
+<script>{{ENGINE_JS}}</script>
+<script>
+/* ========================================================================
+ * 牙牌神数 · 应用层
+ * ===================================================================== */
+(function () {
+  'use strict';
+  const E = window.YapaiEngine;
+  const ORACLE = JSON.parse(document.getElementById('oracle-data').textContent);
+  const CALIB = JSON.parse(document.getElementById('calib-data').textContent);
+  const BY_PATTERN = new Map(ORACLE.map(e => [e.title, e]));
+  const TIERS = ['上上', '上中', '中平', '中下', '下下'];
+  const $ = id => document.getElementById(id);
+
+  const state = {
+    question: '', mode: 'calibrated',
+    result: null,          // {tiers, rounds, entry, question, mode, at}
+    busy: false, skipping: false,
+    dictFilter: '全部', dictQuery: ''
+  };
+
+  /* ---------------------- 小工具 ---------------------- */
+  const sleep = ms => new Promise(r => setTimeout(r, ms));
+  const PIPS = {
+    1: [[2, 2]],
+    2: [[1, 1], [3, 3]],
+    3: [[1, 1], [2, 2], [3, 3]],
+    4: [[1, 1], [1, 3], [3, 1], [3, 3]],
+    5: [[1, 1], [1, 3], [2, 2], [3, 1], [3, 3]],
+    6: [[1, 1], [1, 3], [2, 1], [2, 3], [3, 1], [3, 3]]
+  };
+  function halfHTML(n) {
+    const red = (n === 1 || n === 4) ? ' red' : '';
+    return '<div class="half">' + (PIPS[n] || []).map(([r, c]) =>
+      `<i class="${red.trim()}" style="grid-area:${r}/${c}"></i>`).join('') + '</div>';
+  }
+  function tileHTML(t, cls) {
+    return `<div class="tile ${cls || ''}" title="${t.name}（${t.top}+${t.bottom}）"
+      data-idx="${t.index}">${halfHTML(t.top)}${halfHTML(t.bottom)}</div>`;
+  }
+  function toast(msg) {
+    const el = $('toast'); el.textContent = msg; el.classList.add('on');
+    clearTimeout(el._t); el._t = setTimeout(() => el.classList.remove('on'), 1800);
+  }
+  async function copyText(text, okMsg) {
+    try {
+      await navigator.clipboard.writeText(text);
+      toast(okMsg || '已复制');
+    } catch (e) {
+      const ta = document.createElement('textarea');
+      ta.value = text; document.body.appendChild(ta); ta.select();
+      try { document.execCommand('copy'); toast(okMsg || '已复制'); }
+      catch (_) { toast('复制失败，请手动选择'); }
+      ta.remove();
+    }
+  }
+  function tierClass(t) { return 't-' + t; }
+
+  /* ---------------------- 主题 ---------------------- */
+  const THEME_KEY = 'yapai.theme';
+  function applyTheme(t) {
+    document.documentElement.dataset.theme = t;
+    $('theme-btn').textContent = t === 'night' ? '昼读' : '夜读';
+    try { localStorage.setItem(THEME_KEY, t); } catch (_) {}
+  }
+  $('theme-btn').addEventListener('click', () =>
+    applyTheme(document.documentElement.dataset.theme === 'night' ? 'paper' : 'night'));
+  try {
+    const saved = localStorage.getItem(THEME_KEY);
+    if (saved) applyTheme(saved);
+  } catch (_) {}
+
+  /* ---------------------- 切页 ---------------------- */
+  function switchTab(name) {
+    document.querySelectorAll('#tabs button').forEach(b =>
+      b.classList.toggle('active', b.dataset.tab === name));
+    document.querySelectorAll('.panel').forEach(p =>
+      p.classList.toggle('active', p.id === 'panel-' + name));
+    if (name === 'dict') renderDict();
+    if (name === 'hist') renderHistory();
+  }
+  $('tabs').addEventListener('click', e => {
+    const b = e.target.closest('button[data-tab]');
+    if (b) switchTab(b.dataset.tab);
+  });
+
+  /* ---------------------- 品阶口径 ---------------------- */
+  document.querySelectorAll('input[name=mode]').forEach(r =>
+    r.addEventListener('change', () => { state.mode = r.value; }));
+
+  /* ---------------------- 起占主流程 ---------------------- */
+  $('btn-cast').addEventListener('click', cast);
+  $('btn-skip').addEventListener('click', () => { state.skipping = true; });
+  $('btn-again').addEventListener('click', () => switchTab('cast'));
+
+  async function cast() {
+    if (state.busy) return;
+    state.busy = true; state.skipping = false;
+    state.question = $('question').value.trim();
+    const fast = $('fast').checked;
+    $('btn-cast').disabled = true;
+    $('cast-stage').hidden = false;
+    $('rounds-card').hidden = true;
+    $('cast-progress').hidden = false;
+
+    const rng = E.mulberry32((Date.now() ^ 0x9e3779b9) >>> 0);
+    const rounds = [];
+    $('stage-title').textContent = '凝神定志';
+    $('stage-hint').textContent = '默念所问之事，三息之后起排…';
+    $('deck').innerHTML = '';
+    $('scan-now').textContent = '静候…';
+    $('scan-total').innerHTML = '累计 <b>0</b> 开';
+    if (!fast) await sleep(650);
+    for (let i = 0; i < 3; i++) {
+      const r = await playRoundAnimated(i, rng, fast);
+      rounds.push(r);
+    }
+
+    $('btn-cast').disabled = false;
+    state.busy = false;
+    $('cast-progress').hidden = true;
+
+    const tiers = rounds.map(r => r.tier);
+    renderRounds(rounds);
+    const entry = BY_PATTERN.get(tiers.join(' '));
+    state.result = {
+      tiers, rounds, entry,
+      question: state.question, mode: state.mode,
+      at: new Date().toISOString()
+    };
+    renderOracle(state.result);
+    switchTab('oracle');
+    toast('三数已定 · 第 ' + String(entry.id).padStart(3, '0') + ' 数');
+    document.querySelector('#panel-oracle').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  async function playRoundAnimated(i, rng, fast) {
+    state.skipping = false;                 // 「跳过本轮」只管当前这一排
+    const labels = ['始数', '中数', '末数'];
+    $('stage-title').textContent = `第${['一', '二', '三'][i]}排 · ${labels[i]}`;
+    $('stage-hint').textContent = '诚心默念所问之事，洗牌中…';
+    // 洗牌
+    const deck = $('deck');
+    const shuffled = E.shuffleDeck(rng);
+    deck.innerHTML = shuffled.map(t => tileHTML(t, 'reveal')).join('');
+    $('scan-total').innerHTML = '累计 <b>0</b> 开';
+    $('scan-now').textContent = '洗牌…';
+    if (!fast) await sleep(520);
+    // 计算
+    const rnd = E.playRound(rng, shuffled);
+    const tiles = deck.querySelectorAll('.tile');
+    const step = fast ? 0 : 46;
+    $('stage-hint').textContent = '三十滑窗，逐窗取最高一开';
+    for (const w of rnd.windows) {
+      tiles.forEach((t, k) => {
+        t.classList.remove('win');
+        t.classList.toggle('dim', k < w.start || k > w.start + 2);
+      });
+      for (let k = 0; k < 3; k++) tiles[w.start + k].classList.add('win');
+      if (deck.scrollWidth > deck.clientWidth + 4) {
+        const left = tiles[w.start].offsetLeft - 16;
+        if (Math.abs(deck.scrollLeft - left) > 40) deck.scrollLeft = left;
+      }
+      $('scan-now').innerHTML = `第 ${w.start + 1} 窗 · <b>${w.pattern}</b>` +
+        (w.value ? ` +${w.value}` : '');
+      if (step) {
+        const acc = rnd.windows.slice(0, w.start + 1).reduce((s, x) => s + x.value, 0);
+        $('scan-total').innerHTML = `累计 <b>${acc}</b> 开`;
+        await sleep(state.skipping ? 0 : step);
+      }
+    }
+    tiles.forEach(t => t.classList.remove('win'));
+    $('scan-now').innerHTML = `总开 <b>${rnd.total}</b>`;
+    $('scan-total').innerHTML = `判定 <b>${E.grade(rnd.total, state.mode)}</b>`;
+    $('stage-hint').textContent = rnd.total > 0
+      ? `${rnd.total} 开 → ${E.grade(rnd.total, state.mode)}`
+      : '〇开不吉，须重排（原书【求占秘要】）';
+    if (!fast) await sleep(420);
+    // 0开重排
+    if (rnd.total === 0) {
+      $('stage-hint').textContent = '〇开 · 虔诚祷告，凝神定志后再排';
+      await sleep(fast ? 0 : 700);
+      return playRoundAnimated(i, rng, fast);
+    }
+    return { round: rnd, tier: E.grade(rnd.total, state.mode), label: labels[i] };
+  }
+
+  function renderRounds(rounds) {
+    $('rounds-card').hidden = false;
+    $('rounds-list').innerHTML = rounds.map((r, i) => {
+      const v = r.round.total;
+      const top = Object.entries(r.round.patternCounts)
+        .filter(([k]) => k !== '无开')
+        .sort((a, b) => E.PATTERN_VALUES[b[0]] - E.PATTERN_VALUES[a[0]]);
+      return `<div class="step${i === 2 ? ' h' : ''}">
+        <div class="k">${r.label} · ${v} 开 → ${r.tier}</div>
+        <div class="v">${top.length ? top.map(([k, n]) => `${k}×${n}`).join('　') : '未见成开'
+        }${r.round.patternCounts['无开'] ? `　（无开×${r.round.patternCounts['无开']}）` : ''}</div>
+      </div>`;
+    }).join('');
+  }
+
+  /* ---------------------- 解读生成 ---------------------- */
+  const TIER_DESC = {
+    上上: { status: '大吉', qi: '气旺而顺', start: '起点高、本心正，机缘自来相就', mid: '势如破竹，进取无碍，贵人多助', end: '功成圆满，名利两全' },
+    上中: { status: '吉', qi: '气顺中有小滞', start: '开手顺遂，略有牵掣亦不足虑', mid: '渐入佳境，须借人力方得全功', end: '收成可观，惟不宜志满' },
+    中平: { status: '平', qi: '气和而不动', start: '境况平平，既定格局无甚变动', mid: '守成则可，妄动则劳而无功', end: '安常处顺，所得如其所种' },
+    中下: { status: '滞', qi: '气弱而多阻', start: '开局即有阻隔，事多曲折', mid: '进退两难，宜守旧勿贪新', end: '若能量力知止，可免大损' },
+    下下: { status: '凶', qi: '气陷而不振', start: '起因已见失着，根基未固', mid: '风波叠起，小人暗算须防', end: '终局难全，保身为上，勿强求' }
+  };
+  const TREND_RULES = [
+    { test: t => t.every(x => x === '上上'), text: '三数皆上上，三阳开泰。此局吉之极矣，惟「持盈戒满」四字须刻在心头——极盛之时，正是考验守成之力的时候。', tone: 'great' },
+    { test: t => t.every(x => x === t[0]), text: '三数一致，气象纯粹。事之始终不出此一格，正可据此定进退之节，不必再多疑。', tone: 'flat' },
+    { test: t => t[0] === '上上' && t[1] === '上上' && t[2] === '下下', text: '始、中两数上上，末数忽坠下下：正合原书「七十二战，战无不利；忽闻楚歌，一败涂地」之象。前段得势最易生骄，功成之际便是最险之处，急流勇退方是保全之道。', tone: 'fall' },
+    { test: t => t[0] === '下下' && t[1] === '下下' && t[2] === '上上', text: '两下下而后上上，正合「太公八十遇文王」之象。前段沉潜无功，非才不足，时未至耳；守得住便是转机。', tone: 'rise' },
+    { test: t => t[0] === '下下' && t[1] === '下下' && t[2] === '中下', text: '三数俱卑，气陷难振。此时谋大事必受挫，不如收束规模、专守本业，先求不失，再图后举。', tone: 'low' },
+    { test: t => t[0] === '上上' && t[2] === '上上', text: '首尾皆上上，中有起伏。大局是吉，惟中途那一段曲折最须留意：那不是终点，只是路上的一道坎，守过便通。', tone: 'good' },
+    { test: t => t[0] === '下下' && t[2] === '上上', text: '始凶末吉，正是「否极泰来」之局。眼前困顿只是序章，最忌在将通未通之际自弃。', tone: 'rise' },
+    { test: t => t[0] === '上上' && t[2] === '下下', text: '始吉末凶，盛极而衰之象。开局之顺不必喜，须于中途设防：见好即收，才是把吉留住的办法。', tone: 'fall' },
+    { test: t => t[0] === '下下' || t[2] === '下下', text: '一端见下下，此局有硬伤。所问之事宜缩小规模、降低预期，先保根本，再论得失。', tone: 'low' },
+    { test: t => t[1] === '上上', text: '中数得单上上，事之枢机在「半途」：机会多在中段出现，须于中途用力，不可错过。', tone: 'good' },
+    { test: t => t[1] === '下下', text: '中数见下下，是中途易生变之象。凡事宜留后手、备退路，切忌把全部筹码压在一处。', tone: 'warn' },
+    { test: () => true, text: '三数平顺流转，无大起大落。此局重在「按部就班」：不急不躁，顺着时序推移，自有所得。', tone: 'flat' }
+  ];
+  const QUESTION_HINTS = [
+    { k: ['工作', '职业', '事业', '换工', '跳槽', '升职', '创业', '公司', '职场', '生意'], a: '事业之局，先看「中数」能否得力：中段得助则进，中段见滞则守。凡欲变动，宜待时机而非硬闯。' },
+    { k: ['财', '投资', '股票', '基金', '钱', '收入', '赚', '亏', '生意'], a: '财上之事，最忌「末数」见下下而仍加码。吉则乘势而收，凶则减仓守本，切勿以借贷博取。' },
+    { k: ['婚', '感情', '恋', '对象', '结婚', '离婚', '复合', '喜欢'], a: '情缘之占，重在看三数是否「渐高」：渐高者和合可成，两端相悬者聚散无常，与其勉强，不如让时间说话。' },
+    { k: ['考试', '考', '学业', '读书', '升学', '考研', '面试', '资格'], a: '考试之事，中数为「用功之段」，末数为「放榜之期」。中数卑而末数高者，往往苦尽甘来；反之则须防临场失手。' },
+    { k: ['病', '健康', '身体', '手术', '医'], a: '问病以「末数」为归：末数吉则渐愈，宜早延良医；末数凶则不可拖延，须以养护为先，勿信偏方。' },
+    { k: ['出行', '搬家', '搬迁', '旅游', '出国', '远行', '移居'], a: '行旅移居，看中数有无阻隔：中数滞者路途多周折，宜改期或备预案；三数渐高者，动则得利。' },
+    { k: ['官司', '诉讼', '纠纷', '合同', '仲裁', '打官司'], a: '官非之事，最忌「中下、下下」连见：宜和解、宜守理，不可再添口舌。留好凭据，胜过强辩。' },
+    { k: ['失物', '丢', '找', '寻'], a: '失物之占，吉则急寻可回，凶则散而不返。若末数见吉，速寻勿缓；末数见凶，舍之反安。' },
+    { k: ['房', '田宅', '置产', '买楼', '装修', '租'], a: '田宅之事，宜看「始数」根基：始吉者产可久守，始卑者纵得亦有后患，签约之前须细审条款。' },
+    { k: ['孩子', '子女', '怀孕', '求子', '子女缘'], a: '子嗣之占，末数为要：末数吉则门庭添喜，凶则宜调养身心、静待时日。' }
+  ];
+
+  function buildNarrative(tiers, entry) {
+    const [a, b, c] = tiers;
+    const dA = TIER_DESC[a], dB = TIER_DESC[b], dC = TIER_DESC[c];
+    const trend = TREND_RULES.find(r => r.test(tiers));
+    const steps = [
+      { k: '始 · 起因本心', v: `${a}（${dA.status}）：${dA.start}。` },
+      { k: '中 · 变迁借力', v: `${b}（${dB.status}）：${dB.mid}。` },
+      { k: '末 · 终局归宿', v: `${c}（${dC.status}）：${dC.end}。` }
+    ];
+    const advice = {
+      上上: '可放手施为，惟须持盈戒满，留一分余地。',
+      上中: '顺势而进，兼听人言，勿以小事生懈。',
+      中平: '守成为主，静待时令，不必强求速效。',
+      中下: '知止为智：缩小目标、保住根本，胜于勉强争胜。',
+      下下: '以保全为上，退一步即安；切忌孤注一掷。'
+    }[c];
+    return { steps, trendText: trend.text, advice, trendTone: trend.tone };
+  }
+
+  function questionHint(q) {
+    if (!q) return [];
+    const hits = [];
+    for (const g of QUESTION_HINTS) {
+      if (g.k.some(k => q.includes(k))) hits.push(g.a);
+    }
+    return hits.slice(0, 2);
+  }
+
+  /* 解曰 里与本问相关的小句高亮 */
+  const JIE_KEYS = [
+    { k: ['名', '功名', '考试', '考'], w: ['求名', '功名', '科甲', '名'] },
+    { k: ['财', '利', '钱', '投资', '生意'], w: ['求利', '财', '置产'] },
+    { k: ['婚', '感情', '姻'], w: ['婚姻', '伉俪', '良缘'] },
+    { k: ['子女', '孩子', '怀孕', '子嗣'], w: ['子嗣', '六甲', '嗣'] },
+    { k: ['行人', '朋友', '消息', '联系'], w: ['行人', '消息', '音信'] },
+    { k: ['官司', '诉讼', '纠纷'], w: ['官司', '官事', '讼'] },
+    { k: ['失物', '丢', '寻'], w: ['失物'] },
+    { k: ['房', '田宅', '置产', '楼'], w: ['田宅', '置产', '田'] },
+    { k: ['病', '健康', '医'], w: ['病', '延医', '药'] }
+  ];
+  function highlightJie(jie, question) {
+    const safe = jie.replace(/[&<>]/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[ch]));
+    if (!question) return safe;
+    let words = [];
+    for (const g of JIE_KEYS) if (g.k.some(k => question.includes(k))) words = words.concat(g.w);
+    if (!words.length) return safe;
+    const uniq = [...new Set(words)].sort((x, y) => y.length - x.length);
+    const re = new RegExp('(' + uniq.map(w => w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|') + ')', 'g');
+    return safe.replace(re, '<span class="hit">$1</span>');
+  }
+
+  /* ---------------------- 签文渲染 ---------------------- */
+  function renderOracle(res) {
+    const e = res.entry;
+    $('oracle-empty').hidden = true;
+    $('oracle-card').hidden = false;
+    $('res-no').textContent = `第 ${String(e.id).padStart(3, '0')} 数 · ${e.category}`;
+    $('res-trio').innerHTML = res.tiers.map((t, i) =>
+      `<div class="unit"><span class="lbl">${['始', '中', '末'][i]}</span>
+        <span class="stamp ${tierClass(t)}">${t}</span></div>` +
+      (i < 2 ? '<span class="dot">·</span>' : '')).join('');
+    const motto = e.motto || '';
+    $('res-motto').textContent = motto ? `【断意】${motto}` : '';
+    $('res-motto').hidden = !motto;
+    $('res-poem').innerHTML = e.poem.map(l => `<span class="line">${l}</span>`).join('');
+    $('res-jie').innerHTML = highlightJie(e.jie, res.question || '');
+    $('res-duan').textContent = e.duan;
+
+    const nar = buildNarrative(res.tiers, e);
+    const hints = questionHint(res.question || '');
+    $('res-narr').innerHTML = nar.steps.map((s, i) =>
+      `<div class="step${i === 2 ? ' h' : ''}"><div class="k">${s.k}</div><div class="v">${s.v}</div></div>`
+    ).join('');
+    $('res-verdict').innerHTML =
+      `<p style="margin:0 0 8px">${nar.trendText}</p>` +
+      hints.map(h => `<p style="margin:0 0 8px">${h}</p>`).join('') +
+      `<p style="margin:0;color:var(--ink-2)">宜：${nar.advice}</p>`;
+
+    const chips = [];
+    chips.push(`<span class="chip">总开 <b>${res.rounds.map(r => r.round.total).join(' / ')}</b></span>`);
+    chips.push(`<span class="chip">口径 <b>${res.mode === 'book' ? '原书阈值' : '标定'}</b></span>`);
+    for (const [k, v] of Object.entries(E.THRESHOLDS[res.mode])) {
+      if (k === '下下') continue;
+      chips.push(`<span class="chip">${k} ≥ <b>${v}</b></span>`);
+    }
+    $('res-chips').innerHTML = chips.join('');
+
+    $('res-open').innerHTML = res.rounds.map((r, i) => {
+      const top = Object.entries(r.round.patternCounts)
+        .filter(([k]) => k !== '无开')
+        .sort((a, b) => E.PATTERN_VALUES[b[0]] - E.PATTERN_VALUES[a[0]]);
+      const pats = top.map(([k, n]) => `<span class="pat">${k}×${n}</span>`).join('') +
+        (r.round.patternCounts['无开'] ? `<span class="pat zero">无开×${r.round.patternCounts['无开']}</span>` : '');
+      return `<div class="open-row"><span class="lbl">${['始', '中', '末'][i]}</span>
+        <span class="tot">${r.round.total} 开</span>${pats || '<span class="pat">未成开</span>'}</div>`;
+    }).join('');
+
+    $('res-prompt').textContent = buildPrompt(res, nar);
+  }
+
+  function buildPrompt(res, nar) {
+    const e = res.entry;
+    return [
+      '你是精研《牙牌神数》与传统术数的解签师。请依据下列签面，为求占者作一段「触机」式的现代解读（400 字以内），要求：',
+      '1) 结合始（起因本心）、中（变迁借力）、末（终局归宿）三阶，讲清事情的起承转合；',
+      '2) 不作绝对预言，只讲趋势、着力点与风险控制；',
+      '3) 用现代语言，不堆砌术语；必要时点出签文中可「以字应事」的关键字。',
+      '',
+      `【所问】${res.question || '（未填写，泛问自身近期运势）'}`,
+      `【品阶】始 ${res.tiers[0]} · 中 ${res.tiers[1]} · 末 ${res.tiers[2]}（第 ${String(e.id).padStart(3, '0')} 数 · ${e.category}）`,
+      `【总开】${res.rounds.map((r, i) => `${['始', '中', '末'][i]}${r.round.total}开`).join('，')}（口径：${res.mode === 'book' ? '原书阈值' : '标定'}）`,
+      e.motto ? `【断意】${e.motto}` : '',
+      `【诗曰】${e.poem_raw}`,
+      `【解曰】${e.jie}`,
+      `【断曰】${e.duan}`,
+      '',
+      '【参照】' + nar.steps.map(s => s.k + '：' + s.v).join(' '),
+      '【趋势】' + nar.trendText
+    ].filter(l => l !== '').join('\n');
+  }
+
+  function plainOracleText(res) {
+    const e = res.entry;
+    const nar = buildNarrative(res.tiers, e);
+    return [
+      `【所问】${res.question || '（未填写）'}`,
+      `【品阶】始 ${res.tiers[0]} · 中 ${res.tiers[1]} · 末 ${res.tiers[2]}`,
+      `【总开】${res.rounds.map((r, i) => `${['始', '中', '末'][i]}${r.round.total}开`).join('，')}`,
+      '',
+      `第 ${String(e.id).padStart(3, '0')} 数 · ${e.category}${e.motto ? ' · ' + e.motto : ''}`,
+      `诗曰：${e.poem_raw}`,
+      `解曰：${e.jie}`,
+      `断曰：${e.duan}`,
+      '',
+      nar.steps.map(s => s.k + '：' + s.v).join('\n'),
+      '趋势：' + nar.trendText,
+      '宜：' + nar.advice
+    ].join('\n');
+  }
+
+  /* ---------------------- 签文页按钮 ---------------------- */
+  $('btn-copy').addEventListener('click', () => {
+    if (state.result) copyText(plainOracleText(state.result), '签文已复制');
+  });
+  $('btn-copy-prompt').addEventListener('click', () => {
+    if (state.result) copyText($('res-prompt').textContent, '提示词已复制');
+  });
+  $('btn-print').addEventListener('click', () => window.print());
+  $('btn-save').addEventListener('click', () => {
+    if (!state.result) return;
+    saveHistory(state.result); toast('已存入案卷'); renderHistory();
+  });
+
+  /* ---------------------- 存档 ---------------------- */
+  const HIST_KEY = 'yapai.history';
+  function loadHistory() {
+    try { return JSON.parse(localStorage.getItem(HIST_KEY) || '[]'); } catch (_) { return []; }
+  }
+  function saveHistory(res) {
+    const list = loadHistory();
+    list.unshift({
+      at: res.at, question: res.question, tiers: res.tiers,
+      entryId: res.entry.id, mode: res.mode,
+      totals: res.rounds.map(r => r.round.total)
+    });
+    try { localStorage.setItem(HIST_KEY, JSON.stringify(list.slice(0, 60))); } catch (_) {}
+  }
+  function renderHistory() {
+    const list = loadHistory();
+    const box = $('hist-list');
+    if (!list.length) { box.innerHTML = '<div class="empty">案卷尚空。起占后于签文页点「存入案卷」。</div>'; return; }
+    box.innerHTML = list.map((h, i) => `
+      <div class="hist-item">
+        <div style="min-width:0">
+          <div class="q">${escapeHTML(h.question || '（未填所问）')}</div>
+          <div class="meta">${new Date(h.at).toLocaleString('zh-CN')} · 第 ${String(h.entryId).padStart(3, '0')} 数 · ${h.tiers.join(' ')}</div>
+        </div>
+        <div class="row" style="flex:0 0 auto">
+          <button class="btn small" data-h="${i}" type="button">查看</button>
+          <button class="btn small" data-del="${i}" type="button">删</button>
+        </div>
+      </div>`).join('');
+    box.querySelectorAll('[data-h]').forEach(b => b.addEventListener('click', () => {
+      const h = loadHistory()[+b.dataset.h];
+      openFromHistory(h);
+    }));
+    box.querySelectorAll('[data-del]').forEach(b => b.addEventListener('click', () => {
+      const l = loadHistory(); l.splice(+b.dataset.del, 1);
+      try { localStorage.setItem(HIST_KEY, JSON.stringify(l)); } catch (_) {}
+      renderHistory();
+    }));
+  }
+  function escapeHTML(s) {
+    return String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  }
+  $('btn-clear-hist').addEventListener('click', () => {
+    if (!confirm('确定清空全部案卷？')) return;
+    try { localStorage.removeItem(HIST_KEY); } catch (_) {}
+    renderHistory(); toast('案卷已清空');
+  });
+  function openFromHistory(h) {
+    const entry = BY_PATTERN.get(h.tiers.join(' '));
+    if (!entry) return toast('签文数据缺失');
+    const rounds = h.tiers.map((t, i) => ({
+      label: ['始数', '中数', '末数'][i], tier: t,
+      round: { total: (h.totals && h.totals[i]) || 0, windows: [], patternCounts: {}, row: [] }
+    }));
+    state.result = { tiers: h.tiers, rounds, entry, question: h.question, mode: h.mode || 'calibrated', at: h.at };
+    $('res-open').innerHTML = '<span class="muted">（案卷仅存品阶与总开，逐窗明细未保存）</span>';
+    renderOracle(state.result);
+    $('res-open').innerHTML = '<span class="muted">（案卷只存品阶与总开，逐窗开数明细未保存）</span>';
+    switchTab('oracle');
+  }
+
+  /* ---------------------- 签库 ---------------------- */
+  function renderDict() {
+    const filters = ['全部', ...TIERS];
+    $('dict-filters').innerHTML = filters.map(f =>
+      `<button data-f="${f}" class="${state.dictFilter === f ? 'on' : ''}" type="button">${f}</button>`).join('');
+    $('dict-filters').querySelectorAll('button').forEach(b => b.addEventListener('click', () => {
+      state.dictFilter = b.dataset.f; renderDict();
+    }));
+    const q = state.dictQuery.trim().toLowerCase();
+    const list = ORACLE.filter(e => {
+      if (state.dictFilter !== '全部' && e.category !== state.dictFilter + '数') return false;
+      if (!q) return true;
+      return (e.title + e.motto + e.poem_raw + e.jie + e.duan + e.id).toLowerCase().includes(q);
+    });
+    $('dict-list').innerHTML = list.length ? list.map(e => `
+      <div class="dict-item" data-id="${e.id}">
+        <div class="l">
+          <span class="no">#${String(e.id).padStart(3, '0')}</span>
+          <span class="tt">${e.title}</span>
+          <span class="mm">${escapeHTML(e.motto || e.poem[0] || '')}</span>
+        </div>
+        <span class="muted" style="flex:0 0 auto">观 ➔</span>
+      </div>`).join('') : '<div class="empty">无匹配条目</div>';
+    $('dict-list').querySelectorAll('.dict-item').forEach(el => el.addEventListener('click', () => {
+      const e = ORACLE.find(x => x.id === +el.dataset.id);
+      const tiers = [e.initial, e.middle, e.final];
+      const rounds = tiers.map((t, i) => ({
+        label: ['始数', '中数', '末数'][i], tier: t,
+        round: { total: 0, windows: [], patternCounts: {}, row: [] }
+      }));
+      state.result = { tiers, rounds, entry: e, question: '', mode: state.mode, at: new Date().toISOString(), browsed: true };
+      renderOracle(state.result);
+      $('res-open').innerHTML = '<span class="muted">（从签库观览，未实际排牌，故无逐窗开数）</span>';
+      switchTab('oracle');
+    }));
+    const search = $('dict-search');
+    if (search.value !== state.dictQuery) search.value = state.dictQuery;
+  }
+  $('dict-search').addEventListener('input', e => {
+    state.dictQuery = e.target.value; renderDict();
+  });
+
+  /* ---------------------- 原理页 ---------------------- */
+  function renderRule() {
+    const order = ['不同', '五子', '合巧', '分相', '马军', '对子', '么二三', '二三靠', '正快'];
+    $('rule-table').innerHTML = order.map(k => `
+      <tr><td>${k}</td><td><b>${E.PATTERN_VALUES[k]} 开</b></td><td>${E.PATTERN_NOTES[k]}</td></tr>`).join('');
+    const dCal = CALIB.measured_calibrated || {}, dBook = CALIB.measured_book || {};
+    $('tier-table').innerHTML = TIERS.map(t => `
+      <tr>
+        <td><span class="stamp ${tierClass(t)}">${t}</span></td>
+        <td>${t === '下下' ? '0–' + (CALIB.thresholds_calibrated['中下'] - 1) : '≥ ' + CALIB.thresholds_calibrated[t]} 开</td>
+        <td>${t === '下下' ? '0–' + (CALIB.thresholds_book['中下'] - 1) : '≥ ' + CALIB.thresholds_book[t]} 开</td>
+        <td>${(dCal[t] ?? '—')}%（目标 ${(CALIB.target[t])}%）</td>
+      </tr>`).join('');
+    $('cal-book').textContent = dBook['上上'] ?? '51';
+    $('cal-note').textContent = [
+      `验证数据：${CALIB.sims.toLocaleString()} 次排牌模拟（${CALIB.generated_at}）`,
+      `总开：均值 ${CALIB.mean_total}，标准差 ${CALIB.sd_total}，最小 ${CALIB.min_total}，最大 ${CALIB.max_total}，〇开率 ${CALIB.zero_rate}%`,
+      `标定阈值：上上≥${CALIB.thresholds_calibrated['上上']}　上中≥${CALIB.thresholds_calibrated['上中']}　中平≥${CALIB.thresholds_calibrated['中平']}　中下≥${CALIB.thresholds_calibrated['中下']}　下下 0–${CALIB.thresholds_calibrated['中下'] - 1}`,
+      `标定实测：上上 ${dCal['上上']}%　上中 ${dCal['上中']}%　中平 ${dCal['中平']}%　中下 ${dCal['中下']}%　下下 ${dCal['下下']}%（最大偏差 ${CALIB.max_deviation_pp} 个百分点）`,
+      `原书阈值实测：上上 ${dBook['上上']}%　上中 ${dBook['上中']}%　中平 ${dBook['中平']}%　中下 ${dBook['中下']}%　下下 ${dBook['下下']}%`,
+      `意义：开数算法忠于九格；品阶切点两套并存，玩家可自行择一，绝不在暗中改动开数。`
+    ].join('\n');
+    $('verify-note').textContent = [
+      `模拟行数：${CALIB.sims.toLocaleString()}　三连排抽样：${CALIB.draws.toLocaleString()} 次`,
+      `命中签数：${CALIB.combos_seen}/125　最稀有组合概率：${CALIB.rarest_combo_pct}%`,
+      `〇开重占率：${CALIB.zero_rate}%`,
+      `双端一致性：Python 引擎与页面 JS 引擎对 21³ = 9,261 种牌型组合全量比对通过`,
+      `校验项：九格单测 · 窗口数=30 · 总开=各窗之和 · 对子按同名同点判定 · 同种子可复现`,
+      `验证结论：${CALIB.failures.length ? '未通过：' + CALIB.failures.join('；') : '全部通过'}`
+    ].join('\n');
+  }
+
+  /* ---------------------- 启动 ---------------------- */
+  renderRule();
+  renderDict();
+  renderHistory();
+  console.log('%c牙牌神数 %c引擎就绪：32 张牌 / 30 滑窗 / 125 数',
+    'color:#a8332a;font-weight:bold', 'color:#8b7f68');
+})();
+</script>
+</body>
+</html>

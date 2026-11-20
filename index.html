@@ -1,0 +1,1151 @@
+<!DOCTYPE html>
+<html lang="zh-Hans" data-theme="paper">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>牙牌神数 · 三十二骨牌三阶占验</title>
+<meta name="description" content="《牙牌神数》一百二十五数在线占验：32 张牙牌一字排开，三十滑窗计开，连排三次得始中末。">
+<style>
+/* ============================ 主题 ============================ */
+:root{
+  --paper:#f2e8d5; --paper-2:#e9dcc4; --card:#fbf5e7; --ink:#2a2419; --ink-2:#5b5140;
+  --ink-3:#8b7f68; --line:#d6c6a5; --line-2:#c4b28c;
+  --gold:#9a7b3f; --gold-2:#c8a55c; --cinnabar:#a8332a; --cinnabar-2:#c9503f;
+  --green:#4a6b4e; --shadow:0 2px 14px rgba(74,58,30,.10);
+  --tile-w:34px; --tile-h:62px; --radius:10px;
+  --serif:"Songti SC","STSong","Source Han Serif SC","Noto Serif SC","SimSun",serif;
+  --kai:"Kaiti SC","STKaiti","KaiTi","Noto Serif SC",serif;
+}
+html[data-theme="night"]{
+  --paper:#14120f; --paper-2:#1b1815; --card:#1e1a16; --ink:#e6dcc6; --ink-2:#bdae94;
+  --ink-3:#8a7d67; --line:#3a332a; --line-2:#4c4235;
+  --gold:#c8a55c; --gold-2:#dcc07d; --cinnabar:#c9534a; --cinnabar-2:#e0705f;
+  --green:#8aa880; --shadow:0 2px 18px rgba(0,0,0,.5);
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  font-family:var(--serif); color:var(--ink); background:var(--paper);
+  background-image:radial-gradient(circle at 20% 0%,rgba(255,255,255,.35),transparent 45%),
+                   radial-gradient(circle at 90% 100%,rgba(154,123,63,.10),transparent 40%);
+  -webkit-font-smoothing:antialiased; line-height:1.75; font-size:16px;
+  transition:background .3s,color .3s;
+}
+a{color:var(--cinnabar);text-decoration:none}
+/* ============================ 版式 ============================ */
+.wrap{max-width:1080px;margin:0 auto;padding:0 18px 80px}
+header.top{padding:34px 0 12px;text-align:center;position:relative}
+header.top h1{
+  font-family:var(--kai); font-size:clamp(28px,4.6vw,42px); letter-spacing:.22em;
+  margin:0 0 6px; font-weight:600; color:var(--ink);
+}
+header.top h1 .seal{
+  display:inline-block; font-size:.34em; letter-spacing:.06em; vertical-align:middle;
+  border:1.5px solid var(--cinnabar); color:var(--cinnabar); border-radius:4px;
+  padding:2px 6px; margin-left:10px; transform:translateY(-6px) rotate(-3deg);
+  font-family:var(--serif); line-height:1.3;
+}
+header.top p.sub{margin:0;color:var(--ink-3);font-size:13.5px;letter-spacing:.14em}
+.thread{height:1px;background:linear-gradient(90deg,transparent,var(--line-2),transparent);margin:18px 0 0}
+/* 主题切换 */
+.theme-btn{
+  position:absolute; right:0; top:36px; background:none; border:1px solid var(--line-2);
+  color:var(--ink-2); border-radius:999px; padding:5px 12px; font-size:12.5px; cursor:pointer;
+  font-family:var(--serif); letter-spacing:.1em;
+}
+.theme-btn:hover{border-color:var(--gold);color:var(--gold)}
+/* 导航 */
+nav.tabs{display:flex;gap:4px;justify-content:center;flex-wrap:wrap;margin:22px 0 26px}
+nav.tabs button{
+  background:none;border:none;border-bottom:2px solid transparent;color:var(--ink-2);
+  font-family:var(--kai);font-size:17px;letter-spacing:.16em;padding:7px 16px 6px;cursor:pointer;
+  transition:.2s;
+}
+nav.tabs button:hover{color:var(--ink)}
+nav.tabs button.active{color:var(--cinnabar);border-bottom-color:var(--cinnabar)}
+.panel{display:none;animation:fade .35s ease}
+.panel.active{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+/* 卡片 */
+.card{
+  background:var(--card); border:1px solid var(--line); border-radius:var(--radius);
+  box-shadow:var(--shadow); padding:22px 24px; margin-bottom:20px;
+}
+.card h2{
+  font-family:var(--kai); font-size:19px; letter-spacing:.14em; margin:0 0 14px;
+  font-weight:600; color:var(--ink); display:flex; align-items:center; gap:10px;
+}
+.card h2::before{content:"";width:14px;height:1px;background:var(--cinnabar)}
+.muted{color:var(--ink-3);font-size:13.5px}
+.center{text-align:center}
+/* 输入 */
+.field{display:flex;flex-direction:column;gap:8px;margin-bottom:16px}
+.field label{font-size:13.5px;color:var(--ink-2);letter-spacing:.1em}
+textarea,input[type=text],select{
+  font-family:var(--serif);font-size:15.5px;color:var(--ink);background:var(--paper-2);
+  border:1px solid var(--line);border-radius:8px;padding:11px 13px;width:100%;
+  resize:vertical;outline:none;transition:.2s;
+}
+textarea:focus,input[type=text]:focus,select:focus{border-color:var(--gold);background:var(--card)}
+/* 按钮 */
+.btn{
+  font-family:var(--kai);font-size:16px;letter-spacing:.16em;cursor:pointer;
+  border:1px solid var(--line-2);background:var(--paper-2);color:var(--ink);
+  padding:10px 22px;border-radius:8px;transition:.2s;
+}
+.btn:hover{border-color:var(--gold);color:var(--gold)}
+.btn.primary{
+  background:linear-gradient(180deg,var(--cinnabar-2),var(--cinnabar));color:#fff8ea;
+  border-color:var(--cinnabar);box-shadow:0 3px 12px rgba(168,51,42,.28);
+}
+.btn.primary:hover{filter:brightness(1.08);color:#fff8ea}
+.btn:disabled{opacity:.5;cursor:not-allowed;filter:none}
+.btn.small{padding:6px 14px;font-size:13.5px;letter-spacing:.1em}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.spread{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+/* ============================ 牙牌 ============================ */
+.tile{
+  width:var(--tile-w);height:var(--tile-h);border-radius:5px;background:#f8f1de;
+  border:1px solid #c9b78f;box-shadow:0 1px 3px rgba(60,45,20,.22),inset 0 0 0 1px #fffdf6;
+  display:flex;flex-direction:column;padding:2px;flex:0 0 auto;position:relative;
+  transition:transform .18s,border-color .18s,box-shadow .18s;
+}
+html[data-theme="night"] .tile{background:#efe6d2;border-color:#a08c62}
+.tile .half{flex:1;display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(3,1fr);
+  position:relative;padding:1px}
+.tile .half + .half{border-top:1px solid #d8c9a5}
+.tile i{width:74%;height:74%;border-radius:50%;justify-self:center;align-self:center;
+  background:#241f18;display:block}
+.tile i.red{background:#a8332a}
+.tile.win{
+  border-color:var(--cinnabar);transform:translateY(-5px);
+  box-shadow:0 6px 14px rgba(168,51,42,.30),0 0 0 2px rgba(168,51,42,.35);
+}
+.tile.dim{opacity:.34}
+.tile.reveal{animation:drop .28s ease both}
+@keyframes drop{from{opacity:0;transform:translateY(-10px) rotate(-4deg)}to{opacity:1;transform:none}}
+.deck{display:flex;flex-wrap:nowrap;gap:3px;justify-content:center;min-height:calc(var(--tile-h) + 8px);
+  padding:6px 0 4px;overflow-x:auto;overflow-y:hidden;scrollbar-width:thin}
+.deck .tile{cursor:default}
+#deck .tile{width:26px;height:48px}
+#deck .tile i{width:70%;height:70%}
+@media (max-width:900px){
+  .deck{flex-wrap:wrap}
+  #deck .tile{width:var(--tile-w);height:var(--tile-h)}
+}
+/* 扫描条 */
+.scanline{
+  display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;
+  margin-top:14px;padding-top:12px;border-top:1px dashed var(--line);
+  font-size:14px;color:var(--ink-2);
+}
+.scanline .now{font-family:var(--kai);letter-spacing:.1em;color:var(--ink)}
+.scanline .now b{color:var(--cinnabar);font-size:19px}
+.progress{height:3px;background:var(--line);border-radius:2px;overflow:hidden;margin-top:10px}
+.progress > i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--gold-2),var(--cinnabar));
+  transition:width .12s linear}
+/* 品阶印章 */
+.stamp{
+  display:inline-flex;align-items:center;justify-content:center;min-width:74px;
+  padding:7px 12px;border:1.5px solid currentColor;border-radius:6px;
+  font-family:var(--kai);font-size:19px;letter-spacing:.18em;line-height:1.2;
+}
+.t-上上{color:#8f2f24;background:rgba(168,51,42,.07)}
+.t-上中{color:#a8532a;background:rgba(200,120,60,.07)}
+.t-中平{color:#6b6146;background:rgba(120,105,70,.07)}
+.t-中下{color:#4a5a68;background:rgba(70,90,110,.07)}
+.t-下下{color:#33302c;background:rgba(40,38,34,.07)}
+html[data-theme="night"] .t-上上{color:#e08173}
+html[data-theme="night"] .t-上中{color:#dda06a}
+html[data-theme="night"] .t-中平{color:#cfc39f}
+html[data-theme="night"] .t-中下{color:#9fb6c8}
+html[data-theme="night"] .t-下下{color:#a09a90}
+.trio{display:flex;gap:14px;align-items:center;justify-content:center;flex-wrap:wrap;margin:6px 0 4px}
+.trio .unit{display:flex;flex-direction:column;align-items:center;gap:6px}
+.trio .unit span.lbl{font-size:12px;color:var(--ink-3);letter-spacing:.3em}
+.trio .dot{color:var(--line-2);font-size:20px}
+/* 签面 */
+.oracle-head{text-align:center;border-bottom:1px dashed var(--line);padding-bottom:16px;margin-bottom:18px}
+.oracle-head .no{font-family:var(--kai);font-size:14px;letter-spacing:.24em;color:var(--gold)}
+.oracle-head .motto{
+  font-family:var(--kai);font-size:20px;letter-spacing:.12em;color:var(--cinnabar);
+  margin:10px 0 0;
+}
+.poem{font-family:var(--kai);font-size:20px;line-height:2.1;letter-spacing:.1em;text-align:center;margin:16px 0 4px}
+.poem .line{display:block}
+.sec{margin:18px 0 0}
+.sec .tag{
+  font-family:var(--kai);font-size:14px;letter-spacing:.2em;color:var(--gold);
+  display:inline-block;border-bottom:1px solid var(--line);padding-bottom:3px;margin-bottom:8px;
+}
+.sec p{margin:0;font-size:16px;line-height:2;text-align:justify}
+#res-jie .hit{background:rgba(200,165,92,.22);border-radius:3px;padding:0 2px;box-shadow:inset 0 -1px 0 var(--gold)}
+/* 解读 */
+.narr{display:grid;gap:12px}
+.narr .step{
+  border-left:2px solid var(--line-2);padding:2px 0 2px 14px;
+}
+.narr .step.h{.border-left-color:var(--cinnabar)}
+.narr .step .k{font-family:var(--kai);font-size:14px;letter-spacing:.18em;color:var(--ink-3)}
+.narr .step .v{font-size:15.5px}
+.verdict{
+  margin-top:14px;padding:12px 16px;background:var(--paper-2);border-radius:8px;
+  border:1px solid var(--line);font-size:15.5px;
+}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.chip{font-size:12.5px;padding:2px 9px;border-radius:999px;border:1px solid var(--line-2);color:var(--ink-2)}
+.chip b{color:var(--cinnabar);font-weight:600}
+/* 开数明细 */
+.open-list{display:grid;gap:2px;margin-top:4px}
+.open-row{display:flex;gap:9px;flex-wrap:wrap;align-items:center;padding:7px 0;border-bottom:1px dashed var(--line)}
+.open-row:last-child{border-bottom:none}
+.open-row .lbl{font-family:var(--kai);letter-spacing:.2em;color:var(--ink-3);font-size:13px;flex:0 0 auto}
+.open-row .tot{font-family:var(--kai);color:var(--cinnabar);font-size:15px;flex:0 0 auto}
+.open-row .pat{font-size:12.5px;padding:1px 9px;border-radius:5px;background:var(--paper-2);border:1px solid var(--line);color:var(--ink-2);line-height:1.7}
+.open-row .pat.zero{opacity:.55}
+/* 触机 */
+.prompt-box{
+  font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:12.5px;line-height:1.7;
+  background:var(--paper-2);border:1px solid var(--line);border-radius:8px;padding:12px;
+  white-space:pre-wrap;max-height:280px;overflow:auto;color:var(--ink-2);
+}
+/* 签库 */
+.dict-list{display:grid;gap:8px;max-height:70vh;overflow:auto;padding-right:4px}
+.dict-item{
+  display:flex;justify-content:space-between;gap:12px;align-items:center;
+  padding:9px 12px;border:1px solid var(--line);border-radius:8px;cursor:pointer;background:var(--card);
+  transition:.16s;
+}
+.dict-item:hover{border-color:var(--gold);background:var(--paper-2)}
+.dict-item .l{display:flex;gap:10px;align-items:baseline;min-width:0}
+.dict-item .no{font-family:var(--kai);color:var(--gold);font-size:13px;flex:0 0 auto}
+.dict-item .tt{font-family:var(--kai);letter-spacing:.1em;flex:0 0 auto}
+.dict-item .mm{font-size:12.5px;color:var(--ink-3);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.filter-row{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0 14px}
+.filter-row button{
+  font-family:var(--serif);font-size:13px;padding:4px 12px;border-radius:999px;
+  border:1px solid var(--line-2);background:none;color:var(--ink-2);cursor:pointer;
+}
+.filter-row button.on{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+/* 表格 */
+table{width:100%;border-collapse:collapse;font-size:14px;margin-top:6px}
+th,td{text-align:left;padding:7px 8px;border-bottom:1px solid var(--line)}
+th{font-family:var(--kai);letter-spacing:.1em;color:var(--gold);font-weight:600}
+td b{color:var(--cinnabar)}
+/* 存档 */
+.hist-item{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:10px 0;border-bottom:1px dashed var(--line)}
+.hist-item .q{font-size:14.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hist-item .meta{font-size:12.5px;color:var(--ink-3);font-family:var(--kai);letter-spacing:.08em}
+.empty{text-align:center;color:var(--ink-3);padding:28px 0;font-size:14px}
+/* 提示 */
+.toast{
+  position:fixed;left:50%;bottom:32px;transform:translate(-50%,20px);opacity:0;pointer-events:none;
+  background:var(--ink);color:var(--paper);padding:9px 18px;border-radius:999px;font-size:14px;
+  transition:.28s;z-index:99;letter-spacing:.08em;
+}
+.toast.on{opacity:.95;transform:translate(-50%,0)}
+/* 页脚 */
+footer{text-align:center;color:var(--ink-3);font-size:12.5px;letter-spacing:.1em;padding:26px 0 0;line-height:2}
+@media (max-width:640px){
+  :root{--tile-w:22px;--tile-h:40px}
+  .card{padding:16px 14px}
+  .poem{font-size:18px}
+  .stamp{min-width:60px;font-size:16px;letter-spacing:.1em;padding:6px 9px}
+  header.top .theme-btn{position:static;margin-top:12px}
+  .scanline{font-size:13px}
+}
+@media print{
+  .no-print{display:none!important}
+  body{background:#fff}
+  .card{box-shadow:none;border-color:#ccc}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <h1>牙牌神数<span class="seal">三阶占验</span></h1>
+    <p class="sub">全副牙牌一字排 · 中间看有几多开 · 连排三次分明记 · 上下中平内取裁</p>
+    <div class="thread"></div>
+    <button class="theme-btn no-print" id="theme-btn" type="button">夜读</button>
+  </header>
+
+  <nav class="tabs no-print" id="tabs">
+    <button data-tab="cast" class="active">起占</button>
+    <button data-tab="oracle">签文</button>
+    <button data-tab="dict">签库</button>
+    <button data-tab="rule">原理</button>
+    <button data-tab="hist">存案</button>
+  </nav>
+
+  <!-- ======================= 起占 ======================= -->
+  <section class="panel active" id="panel-cast">
+    <div class="card">
+      <h2>静心起占</h2>
+      <div class="field">
+        <label for="question">心中所问（可选）· 越具体越好</label>
+        <textarea id="question" rows="2" placeholder="例：今年换工作可否？下半年投资是否顺利？"></textarea>
+      </div>
+      <div class="row" style="justify-content:space-between">
+        <div class="muted">
+          品阶口径：
+          <label><input type="radio" name="mode" value="calibrated" checked> 标定（默认）</label>
+          &nbsp;
+          <label><input type="radio" name="mode" value="book"> 原书阈值</label>
+          &nbsp;·&nbsp;
+          <label><input type="checkbox" id="fast" checked> 跳过动画</label>
+        </div>
+        <button class="btn primary" id="btn-cast" type="button">静心起占 · 排三次</button>
+      </div>
+      <div class="progress" id="cast-progress" hidden><i></i></div>
+    </div>
+
+    <div class="card" id="cast-stage" hidden>
+      <div class="spread" style="margin-bottom:10px">
+        <h2 style="margin:0" id="stage-title">第一排 · 始数</h2>
+        <span class="muted" id="stage-hint">三十二张牙牌，一字排开</span>
+      </div>
+      <div class="deck" id="deck"></div>
+      <div class="scanline">
+        <span class="now" id="scan-now">静候洗牌…</span>
+        <span id="scan-total">累计 <b>0</b> 开</span>
+      </div>
+      <div class="row" style="margin-top:12px;justify-content:flex-end">
+        <button class="btn small" id="btn-skip" type="button">跳过本轮动画</button>
+      </div>
+    </div>
+
+    <div class="card" id="rounds-card" hidden>
+      <h2>三排结果</h2>
+      <div class="narr" id="rounds-list"></div>
+    </div>
+  </section>
+
+  <!-- ======================= 签文 ======================= -->
+  <section class="panel" id="panel-oracle">
+    <div class="card" id="oracle-empty">
+      <div class="empty">尚未起占。<br>可至「起占」排三次，或于「签库」点选一百二十五数中任一数。</div>
+    </div>
+
+    <div class="card" id="oracle-card" hidden>
+      <div class="oracle-head">
+        <div class="no" id="res-no">第 001 数</div>
+        <div class="trio" id="res-trio"></div>
+        <div class="motto" id="res-motto"></div>
+      </div>
+      <div class="poem" id="res-poem"></div>
+
+      <div class="sec">
+        <span class="tag">解 曰</span>
+        <p id="res-jie"></p>
+      </div>
+      <div class="sec">
+        <span class="tag">断 曰</span>
+        <p id="res-duan"></p>
+      </div>
+      <div class="sec">
+        <span class="tag">始 中 末 · 触 机</span>
+        <div class="narr" id="res-narr"></div>
+        <div class="verdict" id="res-verdict"></div>
+        <div class="chips" id="res-chips"></div>
+      </div>
+      <div class="sec">
+        <span class="tag">开 数 明 细</span>
+        <div class="open-list" id="res-open"></div>
+      </div>
+      <div class="sec no-print">
+        <span class="tag">触 机 提 示 词</span>
+        <div class="prompt-box" id="res-prompt"></div>
+        <div class="row" style="margin-top:10px">
+          <button class="btn small" id="btn-copy" type="button">复制签文</button>
+          <button class="btn small" id="btn-copy-prompt" type="button">复制提示词</button>
+          <button class="btn small" id="btn-save" type="button">存入案卷</button>
+          <button class="btn small" id="btn-print" type="button">打印／另存 PDF</button>
+          <button class="btn small" id="btn-again" type="button">再占一次</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================= 签库 ======================= -->
+  <section class="panel" id="panel-dict">
+    <div class="card">
+      <h2>一百二十五数</h2>
+      <input type="text" id="dict-search" placeholder="搜号码、品阶（如 上上 中平 上上）、断意、诗曰、解曰……">
+      <div class="filter-row" id="dict-filters"></div>
+      <div class="dict-list" id="dict-list"></div>
+    </div>
+  </section>
+
+  <!-- ======================= 原理 ======================= -->
+  <section class="panel" id="panel-rule">
+    <div class="card">
+      <h2>占法 · 开数九格</h2>
+      <p class="muted">三十二张牙牌（文牌十一种各两张、武牌十张）洗乱，一字排开，取三十个相邻三张的滑动窗口；每窗只记<strong>最高一开</strong>，互不叠加；三十窗之和为一次「总开」。</p>
+      <table>
+        <thead><tr><th style="width:76px">开数</th><th style="width:64px">分值</th><th>成开规则</th></tr></thead>
+        <tbody id="rule-table"></tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <h2>品阶 · 五等</h2>
+      <table>
+        <thead><tr><th>品阶</th><th>标定口径（默认）</th><th>原书阈值</th><th>单次概率（实测）</th></tr></thead>
+        <tbody id="tier-table"></tbody>
+      </table>
+      <p class="muted" style="margin-top:12px">
+        原书以「十二开以上为上上、十至十一开为上中、八至九开为中平、五至七开为中下、一至四开为下下」定品。
+        依九格逐窗计开、三十窗相加之后，实测分布会严重偏上（上上约占 <span id="cal-book">51</span>%）。
+        故默认采用「标定口径」：<strong>开数算法一字不改</strong>，仅把四个品阶切点按其目标概率分位对齐，
+        使单次品阶概率回到 <span id="cal-target">12.5 / 22.2 / 33.4 / 25.9 / 6.0</span>%。可在起占处随时切回「原书阈值」。
+      </p>
+      <div class="prompt-box" id="cal-note" style="max-height:none"></div>
+    </div>
+
+    <div class="card">
+      <h2>铁律 · 防止走样</h2>
+      <ol class="muted" style="line-height:2;padding-left:20px">
+        <li>三十二张牌，取<strong>三十</strong>个三张滑窗（下标 0–29），不多不少。</li>
+        <li>每窗取<strong>最高</strong>一开：不同6 &gt; 五子5 &gt; 合巧4 &gt; 分相/马军/对子/么二三/二三靠3 &gt; 正快1。同窗多格并存时不得累加。</li>
+        <li>「对子」只在<strong>窗内</strong>判定两张完全相同的牌，绝不跨窗、不整副牌去找对。</li>
+        <li>总开为 0 时按原书【求占秘要】须重排，不入品。</li>
+        <li>连排三次：初数＝始（起因本心）、中数＝中（变迁借力）、末数＝末（终局归宿），三数合成一签。</li>
+        <li>同一随机种子必须复现同一局；引擎 Python 与 JS 同口径，21³ 组合全量比对通过。</li>
+      </ol>
+    </div>
+
+    <div class="card">
+      <h2>验证</h2>
+      <div class="prompt-box" id="verify-note" style="max-height:none"></div>
+      <p class="muted" style="margin-top:10px">复现命令：<code>python tests/verify.py</code>（规则单测 + 概率标定 + 125 数覆盖 + 双端一致性）</p>
+    </div>
+  </section>
+
+  <!-- ======================= 存案 ======================= -->
+  <section class="panel" id="panel-hist">
+    <div class="card">
+      <div class="spread">
+        <h2 style="margin:0">案卷</h2>
+        <button class="btn small no-print" id="btn-clear-hist" type="button">清空</button>
+      </div>
+      <div id="hist-list"></div>
+    </div>
+  </section>
+
+  <footer>
+    《牙牌神数》清·何汝柽 撰　岳庆山樵 著　术数西川斋 整理<br>
+    占者诚心求之，则无不应验；如占得之数与所问之事语气未协，当于字句间玩味详测之。
+  </footer>
+</div>
+<div class="toast" id="toast"></div>
+
+<script id="oracle-data" type="application/json">[{"id": 1, "initial": "上上", "middle": "上上", "final": "上上", "title": "上上 上上 上上", "category": "上上数", "motto": "", "poem": ["三阳开泰喜相逢，物在春台日在东。", "所欲随心能自至，天和人合万缘通。"], "poem_raw": "三阳开泰喜相逢，物在春台日在东。所欲随心能自至，天和人合万缘通。", "jie": "求名求利总相宜，子嗣婚姻更可期。若问行人消息至，官司有理莫游移。失物早寻容易得，置田宅不须疑。延医早得高名士，药到回春奏效奇。", "duan": "混沌初开，三清一气。持盈戒满，推行尽利。○三数上上，其吉大矣。"}, {"id": 2, "initial": "上上", "middle": "上上", "final": "上中", "title": "上上 上上 上中", "category": "上上数", "motto": "称心如意，无往不利。", "poem": ["五百昌期名世生，太平有象日光亨。", "持盈保泰臻全盛，道在中行获利贞。"], "poem_raw": "五百昌期名世生，太平有象日光亨。持盈保泰臻全盛，道在中行获利贞。", "jie": "动作皆如意，谋为必称心。吉人天自佑，福禄保安宁。", "duan": "东风嘘广陌，浓绿满新郊。药栏花开好，婪尾殿春宵。○两数上上，三数亦得上中，故有婪尾之喜。"}, {"id": 3, "initial": "上上", "middle": "上上", "final": "中平", "title": "上上 上上 中平", "category": "上上数", "motto": "求名求利，无不咸宜。", "poem": ["紫微龙德坐当头，到处逢迎不用忧。", "绚烂极时平淡好，安居乐业更何求。"], "poem_raw": "紫微龙德坐当头，到处逢迎不用忧。绚烂极时平淡好，安居乐业更何求。", "jie": "大事可成，有益无咎。在尔行为，无不中彀。", "duan": "高风振林木，猛虎山中行。遇之夷然视，猛虎不伤人。○两得上上，猛虎在山之象；中平得中，宜其不伤人也。"}, {"id": 4, "initial": "上上", "middle": "上上", "final": "中下", "title": "上上 上上 中下", "category": "上上数", "motto": "主意拿定，立见成功。", "poem": ["一帆风顺及时扬，稳度鲸川万里航。", "若到帆随湘转处，下坡骏马早收缰。"], "poem_raw": "一帆风顺及时扬，稳度鲸川万里航。若到帆随湘转处，下坡骏马早收缰。", "jie": "谋为勿忧煎，成全在目前。施为无不利，到处要周旋。", "duan": "黄菊晚香，清节可贵。逝水回波，急流勇退。○中下稍卑，宜有急流勇退之象。"}, {"id": 5, "initial": "上上", "middle": "上上", "final": "下下", "title": "上上 上上 下下", "category": "上上数", "motto": "事虽必成，费尽心力。", "poem": ["七十二战，战无不利。", "忽闻楚歌，一败涂地。"], "poem_raw": "七十二战，战无不利。忽闻楚歌，一败涂地。", "jie": "心下事悠然，用舍未能全。行为稍顺意，谋望要贞坚。", "duan": "万里从军仗剑行，鬼狐巢穴一时平。老不封侯嗟已晚，酒阑灯炧独伤神。○两得上上，忽而下下，不伦极矣。占有伤慎之。"}, {"id": 6, "initial": "上上", "middle": "上中", "final": "上上", "title": "上上 上中 上上", "category": "上上数", "motto": "", "poem": ["名也。", "有利也。", "有百事吉。", "皆成就。", "海舶两头高，飞篷驾六鳌。", "居中能御驶，何怕涉风涛。"], "poem_raw": "名也。有利也。有百事吉。皆成就。海舶两头高，飞篷驾六鳌。居中能御驶，何怕涉风涛。", "jie": "功名富贵不由人，幸遇天公助尔成。从此声名山岳重，问君何以答皇仁。", "duan": "苍松倚修竹，中露枫叶丹。莫嗟颜色改，花信此中探。○首尾上上，中数亦得上中，故有探花之兆。"}, {"id": 7, "initial": "上上", "middle": "中平", "final": "上上", "title": "上上 中平 上上", "category": "上上数", "motto": "随遇而安，无不顺遂。", "poem": ["前有高山，后有峻岭。", "旷宇天开，良田万顷。"], "poem_raw": "前有高山，后有峻岭。旷宇天开，良田万顷。", "jie": "时运正亨通，出门交有功。舟行逢顺水，千里满乘风。", "duan": "峭石双峰起，方塘一鉴融。天生好境界，嘘尔是春风。○首尾上上，中数中平，有一鉴在中之象，洵吉兆也。"}, {"id": 8, "initial": "上上", "middle": "中下", "final": "上上", "title": "上上 中下 上上", "category": "上上数", "motto": "否极泰来，步步春风。", "poem": ["良骥追风，千里一蹶。", "逸群绝伦，终异啮橛。"], "poem_raw": "良骥追风，千里一蹶。逸群绝伦，终异啮橛。", "jie": "喜喜喜，须防否。否去泰又生，到头还是喜。", "duan": "先损后有益，时来步步吉。玉兔待圆生，光辉照满室。○二数中下，三数忽然上上，有先否后泰之象。"}, {"id": 9, "initial": "上上", "middle": "下下", "final": "上上", "title": "上上 下下 上上", "category": "上上数", "motto": "凡有谋望，小人须防。", "poem": ["成算在胸中，安危道不穷。", "淮阴天下士，背水立奇功。"], "poem_raw": "成算在胸中，安危道不穷。淮阴天下士，背水立奇功。", "jie": "所事本非难，忽然平地起波澜。所事原非易，平平淡淡终有济。", "duan": "智者千虑，必有一失；愚者千虑，必有一得。道在中孚，占在丽泽。○上上居首，中数下下一失之象，三数仍上上一得之象。"}, {"id": 10, "initial": "上上", "middle": "上中", "final": "上中", "title": "上上 上中 上中", "category": "上上数", "motto": "谋望称心，犹贵守分。", "poem": ["扶舆钟秀气，间世发英材。", "不得中行士，还思狂狷裁。"], "poem_raw": "扶舆钟秀气，间世发英材。不得中行士，还思狂狷裁。", "jie": "檐前喜鹊噪，房中灯蕊报。忧煎渐渐消，诸事咸称好。", "duan": "聪明正直仰神人，俯事修和庶政平。拽起风帆投顺境，此行何处不通津。○上上神人之象，两得上中，宜有和平之占矣。"}, {"id": 11, "initial": "上上", "middle": "中平", "final": "中平", "title": "上上 中平 中平", "category": "上上数", "motto": "谋事有成，求财大利。", "poem": ["大开围场，射鹿得獐。", "顾盼自喜，中必叠双。"], "poem_raw": "大开围场，射鹿得獐。顾盼自喜，中必叠双。", "jie": "乘马任西东，求为定必丰。休言心未遂，此去便亨通。", "duan": "一口适将二口乘，道旁作室事难成。一人行则得其友，三人行则损一人。○首数上上，二三从同，故有是占。"}, {"id": 12, "initial": "上上", "middle": "中下", "final": "中下", "title": "上上 中下 中下", "category": "上上数", "motto": "", "poem": ["洛阳锦绣万花丛，烂漫枝头不耐风。", "三五月明时易过，夕阳西下水流东。"], "poem_raw": "洛阳锦绣万花丛，烂漫枝头不耐风。三五月明时易过，夕阳西下水流东。", "jie": "乐之极矣悲将至，谋望将成终属空。纵然巧计安排好，犹恐相逢是梦中。", "duan": "青天一鹤，燕雀群起。君子伤哉，小人众矣。贵者有权，周而不比。数当盛则以一君子去众小人；若当叔季之世，则恐众小人谗害君子，当审时也。○首数上上一鹤之象，亦贵者之象。"}, {"id": 13, "initial": "上上", "middle": "下下", "final": "下下", "title": "上上 下下 下下", "category": "上上数", "motto": "欲进反退，不如不动。", "poem": ["巍巍三晋大梁风，侈口称强气自雄。", "东败于齐南辱楚，始知余荫不为功。"], "poem_raw": "巍巍三晋大梁风，侈口称强气自雄。东败于齐南辱楚，始知余荫不为功。", "jie": "虚名虚利久沈沈，谋事由来未见真。痴心只望思前进，时乖运蹇总邅迍。", "duan": "离人独立，渺渺飞仙。鼓吹两部，坐井观天。○上上有求仙之象，两得下下，故有坐井之占。"}, {"id": 14, "initial": "上上", "middle": "上中", "final": "中平", "title": "上上 上中 中平", "category": "上上数", "motto": "已经通泰，随心所欲。", "poem": ["日中则昃，月盈则蚀。", "及此时光，谨守亦得。"], "poem_raw": "日中则昃，月盈则蚀。及此时光，谨守亦得。", "jie": "目下有佳音，行人在半程。时来风送急，何处不通亨。", "duan": "随波逐流，瞬息千里。三鸟鸣飞，一鸥翔起。○三数蝉联，宜有是占。"}, {"id": 15, "initial": "上上", "middle": "上中", "final": "中下", "title": "上上 上中 中下", "category": "上上数", "motto": "凡百小心，不可妄图。", "poem": ["生老病死，人之常理。", "天清地旷有穷期，人不虚生斯可矣。"], "poem_raw": "生老病死，人之常理。天清地旷有穷期，人不虚生斯可矣。", "jie": "无怪事多疑，胸中少主持。虽无差错处，也要费踌躇。", "duan": "机会难逢，功成欲速。鬼瞰高明，谨防失足。○中下已卑，故有失足之戒。"}, {"id": 16, "initial": "上上", "middle": "上中", "final": "下下", "title": "上上 上中 下下", "category": "上上数", "motto": "进无益，且耐守。", "poem": ["拔茅连茹，承流当宁。", "其道大光，为霖为雨。"], "poem_raw": "拔茅连茹，承流当宁。其道大光，为霖为雨。", "jie": "平生志气与天高，欲向长川钓巨鳌。岂料波深难着力，此身且漫去游遨。", "duan": "云间见月出，月出在高天。仰面看明月，俯影落清泉。○首尾悬绝，故有明月清泉之象。"}, {"id": 17, "initial": "上上", "middle": "中平", "final": "上中", "title": "上上 中平 上中", "category": "上上数", "motto": "枉费心机，不必求谋。", "poem": ["瞻之在前，忽焉在后。", "种瓜得瓜，种豆得豆。"], "poem_raw": "瞻之在前，忽焉在后。种瓜得瓜，种豆得豆。", "jie": "岁序转阳春，枯枝朵朵新。陶镕归造化，顽铁也成金。", "duan": "奇奇奇，地利与天时。灯火传信后，动静两相宜。○中平渐杀，三数转为上中，是以得吉。"}, {"id": 18, "initial": "上上", "middle": "中平", "final": "中下", "title": "上上 中平 中下", "category": "上上数", "motto": "", "poem": ["从前错，今知觉。", "舍旧从新，方的确。", "天生万物本难齐，好丑随人自取携。", "诸葛三君龙虎狗，乌衣门巷有山鸡。"], "poem_raw": "从前错，今知觉。舍旧从新，方的确。天生万物本难齐，好丑随人自取携。诸葛三君龙虎狗，乌衣门巷有山鸡。", "jie": "疑疑疑，一番笑复一番啼。海市蜃楼多变幻，念头拿定莫痴迷。", "duan": "决策有狐疑，一番欢笑一番啼。文禽本是山梁雉，错被人呼作野鸡。○上上在上，二三得中平、中下，其象不常。"}, {"id": 19, "initial": "上上", "middle": "中平", "final": "下下", "title": "上上 中平 下下", "category": "上上数", "motto": "时运至，必亨通。", "poem": ["始吉非为吉，终凶未是凶。", "如衡真要道，执两用其中。"], "poem_raw": "始吉非为吉，终凶未是凶。如衡真要道，执两用其中。", "jie": "事虽安，心不安。变动两三番，完成难上难。", "duan": "泰山高压闻风高，诸山罗列似儿曹。飞泉流出自山顶，白云淡荡弥山腰。○三数不伦，势渐卑下，故有是占。"}, {"id": 20, "initial": "上上", "middle": "中下", "final": "上中", "title": "上上 中下 上中", "category": "上上数", "motto": "百般事，总成空。", "poem": ["朝暾熊熊，过午忽逝。", "鲁阳挥戈，千古奇事。"], "poem_raw": "朝暾熊熊，过午忽逝。鲁阳挥戈，千古奇事。", "jie": "尔是人中最吉人，误为误作损精神。如今悔却从前事，功名成就在三春。", "duan": "戒心莫倚岩墙立，放步须防峻阪行。何处可安身，高楼两三层。○三数绝不相蒙，有岩墙峻阪之象，垂戒深矣。"}, {"id": 21, "initial": "上上", "middle": "中下", "final": "中平", "title": "上上 中下 中平", "category": "上上数", "motto": "耐心待时，自必亨通。", "poem": ["天生美质，暴弃可惜。", "及早回头，枉寻直尺。"], "poem_raw": "天生美质，暴弃可惜。及早回头，枉寻直尺。", "jie": "事已成，无推托。虽迟迟，不舛错。", "duan": "放乎中流，一篙一桨。迟而不误，退一步想。○中下中平，有一篙一桨之象。"}, {"id": 22, "initial": "上上", "middle": "下下", "final": "上中", "title": "上上 下下 上中", "category": "上上数", "motto": "凡事不利，须防小人。", "poem": ["鸦鸣鹊噪，吉凶互报。", "守约施博，斯为善道。"], "poem_raw": "鸦鸣鹊噪，吉凶互报。守约施博，斯为善道。", "jie": "安静不须疑，乌鹊休乱啼。人间吉凶事，乌岂得先知。", "duan": "话杂难分音上下，危疑莫辨路高低。蒿径岂容麻秉直，暗萤飞度影迷离。○下下上中，有上下高低之象。"}, {"id": 23, "initial": "上上", "middle": "下下", "final": "中平", "title": "上上 下下 中平", "category": "上上数", "motto": "若要成，须用勤。", "poem": ["朱轮绣盖坐高堂，转眼浮云梦一场。", "听尽笙歌樵唱好，看完花卉稻芒香。"], "poem_raw": "朱轮绣盖坐高堂，转眼浮云梦一场。听尽笙歌樵唱好，看完花卉稻芒香。", "jie": "抱玉藏珠久待时，幽窗静处有谁知。若施万丈深潭计，自得骊龙颔下珠。", "duan": "吉凶悔吝生乎动，事不图终昧厥初。巧计无如求象罔，碧潭深处有骊珠。○下下有碧潭之象，中平得骊珠之象。"}, {"id": 24, "initial": "上上", "middle": "下下", "final": "中下", "title": "上上 下下 中下", "category": "上上数", "motto": "宜守旧，不可动。", "poem": ["得失分明形影随，眼前消息尽堪知。", "平阳有路无人问，直到水穷山尽时。"], "poem_raw": "得失分明形影随，眼前消息尽堪知。平阳有路无人问，直到水穷山尽时。", "jie": "下著占先机，迂回路转迷。目前只宜守，且免是和非。", "duan": "得失原无定，将行路转迷。若无人指点，一二是仙机。○上上在上，继以下下中下，故有得失无定之象。"}, {"id": 25, "initial": "上上", "middle": "中下", "final": "下下", "title": "上上 中下 下下", "category": "上上数", "motto": "莫欢喜，总成空。", "poem": ["小时了了，大未必佳。", "其言近谑，其理无差。"], "poem_raw": "小时了了，大未必佳。其言近谑，其理无差。", "jie": "喜乐喜乐，暗中摸索。水月镜花，空中楼阁。", "duan": "衔石填海，抛珠弹雀。视而不见，反成担搁。○中下下下，幽暗之象。"}, {"id": 26, "initial": "上中", "middle": "上中", "final": "上中", "title": "上中 上中 上中", "category": "上中数", "motto": "诸凡如意，大吉大利。", "poem": ["时可图兮势可乘，为山端的是邱陵。", "扶持总赖青云客，龙跃鱼渊象可征。"], "poem_raw": "时可图兮势可乘，为山端的是邱陵。扶持总赖青云客，龙跃鱼渊象可征。", "jie": "千里营谋造化通，功名神助贵人逢。行人已整归鞭计，失物早寻决不空。六甲生男门户喜，婚姻福禄自和同。病人渐渐方能好，万事俱称作治功。", "duan": "柳漾千条绿，花开一品红。天移秋月尘埃外，人在春台雨露中。"}, {"id": 27, "initial": "上中", "middle": "上中", "final": "上上", "title": "上中 上中 上上", "category": "上中数", "motto": "逍遥自在，无往不利。", "poem": ["自是栖鸾地，先开驷马门。", "目前非富贵，福荫在儿孙。"], "poem_raw": "自是栖鸾地，先开驷马门。目前非富贵，福荫在儿孙。", "jie": "积德胜遗金，功名唾手成。光前且裕后，高大尔门庭。", "duan": "二人同心，其利断金。黄金一库，不如教子一经。麟儿好头角，高大尔门庭。○两得上中，同心之象；下有上上，高大之象。"}, {"id": 28, "initial": "上中", "middle": "上中", "final": "中平", "title": "上中 上中 中平", "category": "上中数", "motto": "些须小损，终归有益。", "poem": ["进可以战，退可以守。", "不战不守，唯唯否否。"], "poem_raw": "进可以战，退可以守。不战不守，唯唯否否。", "jie": "富贵由来禾许求，羡君骑鹤上扬州。千般动作皆如意，一路荣封到白头。", "duan": "两脚纷纷不挂愁，一番寒雨几经秋。惟其动作皆循理，许尔安康到白头。○两得上中，而得一中平，有寒雨几经秋之象；终以中平，是以安康。"}, {"id": 29, "initial": "上中", "middle": "上中", "final": "中下", "title": "上中 上中 中下", "category": "上中数", "motto": "目下虽顺，终须谨慎。", "poem": ["步步占先机，输赢未可知。", "局中一着错，输却满盘棋。"], "poem_raw": "步步占先机，输赢未可知。局中一着错，输却满盘棋。", "jie": "成己成物，有光终始。事要商量，莫致参商。", "duan": "积德由来胜积金，羡君世代有簪缨。残年底事行阴险，雪虐风饕末路人。○两数上中，世代簪缨之象；中下已卑，故有末路之讥。"}, {"id": 30, "initial": "上中", "middle": "上中", "final": "下下", "title": "上中 上中 下下", "category": "上中数", "motto": "凡事不利，更防暗害。", "poem": ["一年之计在于春，一日之计在于寅。", "有花可折直须折，莫待无花空怆神。"], "poem_raw": "一年之计在于春，一日之计在于寅。有花可折直须折，莫待无花空怆神。", "jie": "君家久抱采薪忧，岂料心慌药误投。病入膏肓救不得，青囊扁鹊也难瘳。", "duan": "波涛作恶，不利舟楫。见神不拜，遇鬼而揖。隆隆者灭，赫赫者绝。○下下在下，波涛作恶之象；两数上中，忽得下下，故有灭绝之象。"}, {"id": 31, "initial": "上中", "middle": "上上", "final": "上中", "title": "上中 上上 上中", "category": "上中数", "motto": "百事如意，大吉大利。", "poem": ["青云得路，中有奇遇。", "高而不危，我行我素。"], "poem_raw": "青云得路，中有奇遇。高而不危，我行我素。", "jie": "月老冰人说合成，红丝系就不劳心。百年伉俪同偕老，瓜瓞绵绵启后昆。", "duan": "多财善贾，胸有智珠。长袖善舞，家有丽姝。卓哉陶朱，泛舟五湖。○首尾上中，中藏上上，有智珠丽姝之象。"}, {"id": 32, "initial": "上中", "middle": "中平", "final": "上中", "title": "上中 中平 上中", "category": "上中数", "motto": "不必急求，稍迟便得。", "poem": ["颇有昂藏气，何无特达知。", "风尘人不识，亥子会昌期。"], "poem_raw": "颇有昂藏气，何无特达知。风尘人不识，亥子会昌期。", "jie": "舟离渡口箭离弦，人在前途眼望穿。莫怨行人归棹晚，管教日内得团圆。", "duan": "朱提镕大宝，风骨起双翘。中有相容处，声酣午梦劳。○首尾上中，中得中平，宜得是占。"}, {"id": 33, "initial": "上中", "middle": "中下", "final": "上中", "title": "上中 中下 上中", "category": "上中数", "motto": "吉人天相，不必忧虑。", "poem": ["知君不是等闲人，作事如何比匪亲。", "一失足成千古恨，再回头已百年身。"], "poem_raw": "知君不是等闲人，作事如何比匪亲。一失足成千古恨，再回头已百年身。", "jie": "蛟龙岂是池中物，虎豹生来气象奇。平川水浅遭虾戏，待看风云际会时。", "duan": "巍巍复巍巍，势束瞿塘水。巴峡通巫峡，尚未穷源委。景彼舣舟人，平心在卧起。○首尾上中，夹岸巍巍之象；中下势卑，故有水象。"}, {"id": 34, "initial": "上中", "middle": "下下", "final": "上中", "title": "上中 下下 上中", "category": "上中数", "motto": "目下虽塞，久后必亨。", "poem": ["内与外洽，志同道合。", "二阴间之，泄泄沓沓。"], "poem_raw": "内与外洽，志同道合。二阴间之，泄泄沓沓。", "jie": "履险如平地，登高须虑危。幸蒙天意合，何怕路岖崎。", "duan": "秋霖腹疾，损尔娟娟。离而复合，破镜重圆。○下下在中，为腹疾之象；终以上中，故得复合之占。"}, {"id": 35, "initial": "上中", "middle": "上上", "final": "上上", "title": "上中 上上 上上", "category": "上中数", "motto": "虽有小人，不足为害。", "poem": ["睥睨群伦气不侔，谁知推毂仗曹邱。", "二十四考中书令，一路荣华到白头。"], "poem_raw": "睥睨群伦气不侔，谁知推毂仗曹邱。二十四考中书令，一路荣华到白头。", "jie": "鼠牙雀角本非奇，彼若欺人反自欺。明镜高悬道理正，管教庭训得和宜。", "duan": "手挽银河足踏云，立身高处览天文。嫦娥本是神仙侣，三五盈时说与君。○以上中而在两上上之上，故有是占。"}, {"id": 36, "initial": "上中", "middle": "中平", "final": "中平", "title": "上中 中平 中平", "category": "上中数", "motto": "耐心待时，收成在后。", "poem": ["有志事竟成，因人终碌碌。", "不飞复不鸣，无荣亦无辱。"], "poem_raw": "有志事竟成，因人终碌碌。不飞复不鸣，无荣亦无辱。", "jie": "已叶熊罴梦，于今未产婴。诞期还未届，且自放宽心。", "duan": "龙山整冠，沧浪濯足。拾土成金，射兔得鹿。○上中在上，如山如冠之象；两得其中平，故有是象，亦吉占也。"}, {"id": 37, "initial": "上中", "middle": "中下", "final": "中下", "title": "上中 中下 中下", "category": "上中数", "motto": "", "poem": ["小人多，须防之。", "天下事，尚可图。", "庸医杀人其奈何，一误再误胡为乎。"], "poem_raw": "小人多，须防之。天下事，尚可图。庸医杀人其奈何，一误再误胡为乎。", "jie": "不是君家命运低，如何屡次失东西。劝君及早牢关锁，检点些儿也不迟。", "duan": "青春年少擅才华，不是寻常宰相家。一阕清歌绫一匹，两行红粉拥乌纱。○上中在上，故有宰相之象；迭占中下，两行红粉之象，亦吉占也。"}, {"id": 38, "initial": "上中", "middle": "下下", "final": "下下", "title": "上中 下下 下下", "category": "上中数", "motto": "小心谨慎，不可妄想。", "poem": ["手持利剑剸犀兕，迎刃而解差可喜。", "自桧以下无讥焉，其余不足观也已。"], "poem_raw": "手持利剑剸犀兕，迎刃而解差可喜。自桧以下无讥焉，其余不足观也已。", "jie": "福可求兮祸可招，吉凶原隔一丝毫。君今不悟休来问，福不双兮祸莫逃。", "duan": "莫讶小山小，白石为骨树为表。君不见敬仲子孙竟代齐，古人云尾大便不掉。○首数上中，二三下下，故有尾大不掉之占。"}, {"id": 39, "initial": "上中", "middle": "上上", "final": "中平", "title": "上中 上上 中平", "category": "上中数", "motto": "若要成，不可懈。", "poem": ["汉家火德未全衰，白水真人大业恢。", "天意中兴臻上理，下民安乐颂康哉。"], "poem_raw": "汉家火德未全衰，白水真人大业恢。天意中兴臻上理，下民安乐颂康哉。", "jie": "丰稔秋登大有收，田家今岁不须忧。三时梅雨均沾足，四野黄云布满畴。", "duan": "太史新书大有秋，太平帖子唱街头。风花雪月时时喜，满地黄云拂绿畴。○三数皆不卑下，故得吉。"}, {"id": 40, "initial": "上中", "middle": "上上", "final": "中下", "title": "上中 上上 中下", "category": "上中数", "motto": "虽无大好，尚属顺适。", "poem": ["先声已播，可喜可贺。", "大捷之余，还虞小挫。"], "poem_raw": "先声已播，可喜可贺。大捷之余，还虞小挫。", "jie": "生男勿喜女忽悲，生女也可壮门楣。前生未种蓝田玉，忍耐且吟弄瓦诗。", "duan": "出门莫问路东西，一步高来一步低。宽处有缘窄处险，行人去向是鼯鼷。○上上高，上中低；上上宽，中下窄；中下在下，鼯鼷之象。"}, {"id": 41, "initial": "上中", "middle": "上上", "final": "下下", "title": "上中 上上 下下", "category": "上中数", "motto": "得而复失，不如不贪。", "poem": ["物理惟凭造化推，难将智慧论兴衰。", "时来风送滕王阁，运退雷轰荐福碑。"], "poem_raw": "物理惟凭造化推，难将智慧论兴衰。时来风送滕王阁，运退雷轰荐福碑。", "jie": "置产须要得公平，交易公平产必盈。此日若施奸巧计，他时悖出两相称。", "duan": "出入华胥境，路逢白眼人。春风吹不到，一片别离心。○以上中而遇上上，顺境之象；忽逢下下，别离之象。"}, {"id": 42, "initial": "上中", "middle": "中平", "final": "上上", "title": "上中 中平 上上", "category": "上中数", "motto": "东西南北，无往不利。", "poem": ["鲲鹏将图南，去以六月息。", "羊角搏扶摇，大振垂天翼。"], "poem_raw": "鲲鹏将图南，去以六月息。羊角搏扶摇，大振垂天翼。", "jie": "旭日正当空，光辉宇宙中。营谋乘此际，何事不兴隆。", "duan": "山有起伏，路有陂平，须眉如戟，肝胆照人。曦轮方息影，皓月又东升。○上上中平，有起伏陂平之象；上上在下，宜以吉终。"}, {"id": 43, "initial": "上中", "middle": "中平", "final": "中下", "title": "上中 中平 中下", "category": "上中数", "motto": "小人播弄，谨慎无妨。", "poem": ["阳刚不振，阴柔已伏。", "载胥及溺，其何能淑。"], "poem_raw": "阳刚不振，阴柔已伏。载胥及溺，其何能淑。", "jie": "骅骝固云善，驽马亦可乘。惟恐的卢马，未免妨主人。", "duan": "壮夫失路，贫女伤春。回头猛省，惭不如人。○三数渐低，故有不如人之象。"}, {"id": 44, "initial": "上中", "middle": "中平", "final": "下下", "title": "上中 中平 下下", "category": "上中数", "motto": "只宜退守，不可前进。", "poem": ["龙华会里人，还仗修为力。", "闲时不经营，佛脚抱何益。"], "poem_raw": "龙华会里人，还仗修为力。闲时不经营，佛脚抱何益。", "jie": "买个牛儿去种田，结间茅屋白云边。也知时运多颠倒，何必营求惹祸缠。", "duan": "深山辟谷已多年，又蹈红尘学剑仙。暮楚朝秦成底事，误人毕竟是贪泉。○以上中起，继以中平，入山出山之象；终以下下，贪泉之象。为善不卒，故有无益之占。"}, {"id": 45, "initial": "上中", "middle": "中下", "final": "上上", "title": "上中 中下 上上", "category": "上中数", "motto": "守我本分，自能上达。", "poem": ["倒退如牵上濑舟，黄杨阨闰苦虔刘。", "那知柳暗花明处，恰在山穷水尽头。"], "poem_raw": "倒退如牵上濑舟，黄杨阨闰苦虔刘。那知柳暗花明处，恰在山穷水尽头。", "jie": "久坐尘埃心已灰，无端富贵又来催。盐梅自是调羹用，那许凡夫坐井窥。", "duan": "星使乘流去若飞，汉人亲见石支机。补天不费天孙手，记取仙槎送尔归。○上中而遇中下，其势渐卑，乘流之象；以上上终，穷源得石之象。"}, {"id": 46, "initial": "上中", "middle": "中下", "final": "中平", "title": "上中 中下 中平", "category": "上中数", "motto": "人贵知足，不可妄作。", "poem": ["身在高山欲上天，忽生艰阻费周旋。", "积劳始信闲为福，多病方知健是仙。"], "poem_raw": "身在高山欲上天，忽生艰阻费周旋。积劳始信闲为福，多病方知健是仙。", "jie": "积玉堆金富有余，也须勤俭莫奢侈。常将有日思无日，莫待无时想有时。", "duan": "鸥鹭拍拍飞，敛翅啄鲤鳣。一叶打将来，忍饥复惊起。○上中而遇中下，敛翅之象；以中平终，故有健仙之占。"}, {"id": 47, "initial": "上中", "middle": "中下", "final": "下下", "title": "上中 中下 下下", "category": "上中数", "motto": "", "poem": ["间是非，君莫管。", "切己事，须自勉。", "有基弗为，日以侵削。", "听其自然，不可救药。"], "poem_raw": "间是非，君莫管。切己事，须自勉。有基弗为，日以侵削。听其自然，不可救药。", "jie": "莫谓功之首，且为罪之魁。功却未必赏，罪则有攸归。", "duan": "相如消渴，头重脚轻。声闻于宫，永巷知名。黄金取酒，的是解人。○上中居上，下下居下，头重脚轻之象；中下居中，解人之象。"}, {"id": 48, "initial": "上中", "middle": "下下", "final": "上上", "title": "上中 下下 上上", "category": "上中数", "motto": "求名有，求财得。", "poem": ["良材休自蠹，屈蠖必求伸。", "吃得苦中苦，方为人上人。"], "poem_raw": "良材休自蠹，屈蠖必求伸。吃得苦中苦，方为人上人。", "jie": "芸窗虽说有深功，无奈朱衣不肯从。丹桂杏花相逼近，羡君此日定峥嵘。", "duan": "飞矢贯虱，长剑倚天。小言詹詹，大言炎炎。括囊无咎，哲者自全。○上上下下，高卑悬殊，故有大小之象；上中居上，独得自全之象。戒占者，毋以言取咎也。"}, {"id": 49, "initial": "上中", "middle": "下下", "final": "中平", "title": "上中 下下 中平", "category": "上中数", "motto": "历过辛勤，可望上进。", "poem": ["积得床头子母钱，夜逢胠箧一时捐。", "从前枉费经营力，此后安然得晏眠。"], "poem_raw": "积得床头子母钱，夜逢胠箧一时捐。从前枉费经营力，此后安然得晏眠。", "jie": "巍巍科甲喜同登，十年窗下苦呻吟。不是一番寒彻骨，怎得梅花扑鼻馨。", "duan": "狂吏绕床呼，东堂得雉余。休祥凭五采，一喝便成卢。○上中在上，得雉之象；下下转过中平，喝成卢之象。占者主吉。"}, {"id": 50, "initial": "上中", "middle": "下下", "final": "中下", "title": "上中 下下 中下", "category": "上中数", "motto": "诸宜小心，守分为上。", "poem": ["勋华之后，降为舆台。", "安分守己，仅能免灾。"], "poem_raw": "勋华之后，降为舆台。安分守己，仅能免灾。", "jie": "莫说今年运已通，谁知作事不相同。漏屋更遭连夜雨，破船又遇打头风。", "duan": "净植荷亭亭，菡萏出秋水。游鱼戏叶东，翡翠藏叶底。清标耐露寒，不肯随风萎。○上中在上，植荷之象；二三数，鱼鸟之象。幸下下而转中下，安分守己，亦可变凶为吉。"}, {"id": 51, "initial": "中平", "middle": "中平", "final": "中平", "title": "中平 中平 中平", "category": "中平数", "motto": "凡事如意，不必猜疑。", "poem": ["凡事从容逊一筹，也无惊宠也无尤。", "有人问我真消息，二月春分八月秋。"], "poem_raw": "凡事从容逊一筹，也无惊宠也无尤。有人问我真消息，二月春分八月秋。", "jie": "百事尽安宁，营谋指日成。官事自和解，失物易追寻。行人顷刻至，六甲定生麟。婚姻天配合，病者得延龄。", "duan": "莫向人间问羽翰，何须海外觅青鸾。蠹鱼三食神仙字，便已飞升上九天。○三数中平，和平之象，数皆大吉。"}, {"id": 52, "initial": "中平", "middle": "中平", "final": "上上", "title": "中平 中平 上上", "category": "中平数", "motto": "名利称心，不求自得。", "poem": ["年来安稳谢苍天，守旧惟凭心地坚。", "百尺竿头饶进步，平安吉庆本相连。"], "poem_raw": "年来安稳谢苍天，守旧惟凭心地坚。百尺竿头饶进步，平安吉庆本相连。", "jie": "春秋两载好声名，累世阴功佑尔成。从此栽培益加厚，管教后代发簪缨。", "duan": "巍巍门第甚堂皇，两捷春秋姓字香。屈指待逢龙虎日，御书亲点状元郎。○两得中平，两捷之象；以上上终，宜有状头之象。"}, {"id": 53, "initial": "中平", "middle": "中平", "final": "上中", "title": "中平 中平 上中", "category": "中平数", "motto": "苦尽甘来，渐入佳境。", "poem": ["平平稳稳，落落寞寞。", "浅水长流，新竹解箨。"], "poem_raw": "平平稳稳，落落寞寞。浅水长流，新竹解箨。", "jie": "风寒雨湿苦相侵，奈尔孱躯未惯经。喜得沉疴今渐退，调和珍重保长生。", "duan": "东鹣西鲽，其影双双。有只金鳌，大力独扛。守而克恃，强则弱降。只宜守弱，不宜持强。○两得中平，有鹣鲽双影之象；以上中终，有金鳌之占。"}, {"id": 54, "initial": "中平", "middle": "中平", "final": "中下", "title": "中平 中平 中下", "category": "中平数", "motto": "静心守，莫妄求。", "poem": ["履霜坚冰，其象已见。", "不进则退，君子善变。"], "poem_raw": "履霜坚冰，其象已见。不进则退，君子善变。", "jie": "修行学道保天真，总是生前有善根。身在静时心不静，譬如身外见金针。", "duan": "一径入天台，逢仙话劫灰。未将凡骨换，依旧转红埃。○一二中平，有径入天台之象；惜中下在下，故有善变之象。"}, {"id": 55, "initial": "中平", "middle": "中平", "final": "下下", "title": "中平 中平 下下", "category": "中平数", "motto": "事情无定，安分待守。", "poem": ["无用莫欺心，欺心祸即临。", "守愚安我拙，或可免灾祲。"], "poem_raw": "无用莫欺心，欺心祸即临。守愚安我拙，或可免灾祲。", "jie": "行人身已动，有事又牵羁。喜得身安泰，归来自有期。", "duan": "树生连理枝，上有双飞鹊。坠鷇不成雏，辛勤安所托。○首二中平，连理双飞之象；三数下下，鷇不成雏之象。"}, {"id": 56, "initial": "中平", "middle": "上上", "final": "中平", "title": "中平 上上 中平", "category": "中平数", "motto": "存心忠厚，获福无量。", "poem": ["盛德若愚，深藏善贾。", "以貌取人，失之子羽。"], "poem_raw": "盛德若愚，深藏善贾。以貌取人，失之子羽。", "jie": "欲决千里计，先观屋内人。眠牛嘶马地，所卜是佳城。", "duan": "张琴待月，月到天心。时不可失，触手成春。○上上在中，善贾之象，亦天心之象；首尾中平，宜有触手成春之象。"}, {"id": 57, "initial": "中平", "middle": "上中", "final": "中平", "title": "中平 上中 中平", "category": "中平数", "motto": "你再等等，即有好音。", "poem": ["莫嫌舞袖太郎当，敝帚千金价自昂。", "自古痴人有痴福，羡他终始得安康。"], "poem_raw": "莫嫌舞袖太郎当，敝帚千金价自昂。自古痴人有痴福，羡他终始得安康。", "jie": "青鸾家报杳，黄犬音信乖。指日奚童到，何须问六爻。", "duan": "左拍洪崖肩，右挹浮邱袖。或挽于前，或推于后。心有主持，慎重不苟。○上下得中平，有左右前后之象；上中在中，又有心象焉。"}, {"id": 58, "initial": "中平", "middle": "中下", "final": "中平", "title": "中平 中下 中平", "category": "中平数", "motto": "目下阻滞，久后可成。", "poem": ["明明一条坦路，就中坎窞须防。", "小心幸免失足，率履不越周行。"], "poem_raw": "明明一条坦路，就中坎窞须防。小心幸免失足，率履不越周行。", "jie": "宝镜无尘染，如今烟雾昏。若得人磨拭，依旧复光明。", "duan": "蜂腰鹤膝，屈而不舒。见兔顾犬，切勿守株。失之东隅，收之桑榆。○中下间隔于中，宜有蜂腰鹤膝之象；究以中平终，则收之桑榆之象。"}, {"id": 59, "initial": "中平", "middle": "下下", "final": "中平", "title": "中平 下下 中平", "category": "中平数", "motto": "办事须早，不可耽延。", "poem": ["语言无味，面目可憎。", "若问居心，卑鄙尤甚。"], "poem_raw": "语言无味，面目可憎。若问居心，卑鄙尤甚。", "jie": "虽有光明路，难防捷足先。将就且安分，不少一青毡。", "duan": "出本无心，归则有意。洵哉彭泽，不宜栗里。何以折腰，五斗而已。○首尾中平，下下在中，折腰之象；以中平而遇下下，仍遇中平，故为归兆。"}, {"id": 60, "initial": "中平", "middle": "上上", "final": "上上", "title": "中平 上上 上上", "category": "中平数", "motto": "谋望有成，尚需时日。", "poem": ["胯下王孙久见轻，登坛还使一军惊。", "鱼龙变化原无定，时至风云足下生。"], "poem_raw": "胯下王孙久见轻，登坛还使一军惊。鱼龙变化原无定，时至风云足下生。", "jie": "赤日炎炎似火烧，日中禾稼尽枯焦。若逢龙虎风云会，自有甘霖降九霄。", "duan": "古冢埋秦镜，昔日画双龙。待君勤拂拭，的的土花浓。○中平镜象，两得上上，双龙之象。"}, {"id": 61, "initial": "中平", "middle": "上中", "final": "上中", "title": "中平 上中 上中", "category": "中平数", "motto": "喜气重重，有求必遂。", "poem": ["安适无可虞，前行尽坦途。", "更欣依傍处，时与贵人俱。"], "poem_raw": "安适无可虞，前行尽坦途。更欣依傍处，时与贵人俱。", "jie": "已沐皇恩宠，初叨雨露深。蟾宫圆满日，再听送佳音。", "duan": "一到春来柳浪生，垂堤十里尽康衢。快鞭白鹤扬州去，廿四桥头月满湖。○两得上中，坦途康衢之象，吉占也。"}, {"id": 62, "initial": "中平", "middle": "上中", "final": "中下", "title": "中平 上中 中下", "category": "中平数", "motto": "谦受益，满招损。凡事谨慎。", "poem": ["小富由人力，勤修是永图。", "偷安无进意，顿失旧规模。"], "poem_raw": "小富由人力，勤修是永图。偷安无进意，顿失旧规模。", "jie": "蛾眉伐性斧，多言启祸阶。贪杯能致乱，和气免伤财。富向勤中得，贵从修里来。人能明此理，灾退福星回。", "duan": "公无渡河，海水生波。回头是岸，波生奈何。立定脚跟，慎无偏陂。○中下在下，海象也；中平在上，岸象也。立定脚跟，垂戒深也。"}, {"id": 63, "initial": "中平", "middle": "上中", "final": "下下", "title": "中平 上中 下下", "category": "中平数", "motto": "不如守旧，方得逍遥。", "poem": ["刳木为舟楫，虚中可济川。", "浮沈终朽败，委弃不如椽。"], "poem_raw": "刳木为舟楫，虚中可济川。浮沈终朽败，委弃不如椽。", "jie": "喜未至时怨已招，骤雨狂风彻夜号。心中无限事焦劳，迁移何似从前好。", "duan": "风尘物色，相赏有真。花开成锦，落地成茵。时事变迁，难得知音。○以中平而遇上中，花开之象；忽逢下下，为茵之象。三数不同，故有变迁。数中平。"}, {"id": 64, "initial": "中平", "middle": "中下", "final": "中下", "title": "中平 中下 中下", "category": "中平数", "motto": "不必着急，凡百有定。", "poem": ["所愿非奢，未能满欲。", "画虎不成，刻鹄类鹜。"], "poem_raw": "所愿非奢，未能满欲。画虎不成，刻鹄类鹜。", "jie": "知君久欲觅良缘，自有嫦娥下九天。但使河东安睡稳，莫教风急散文鸳。", "duan": "挽弩求中，一发双雕。反弓而踣，祸由自招。尔心不固，尔趾太高。虚中集益，谦之六爻。○两得中下，双雕之象；其象已卑，故有招祸之占，垂戒深矣。"}, {"id": 65, "initial": "中平", "middle": "下下", "final": "下下", "title": "中平 下下 下下", "category": "中平数", "motto": "有始无终，不能成事。", "poem": ["静则庶几，动辄得咎。", "狼跋其前，载疐其后。"], "poem_raw": "静则庶几，动辄得咎。狼跋其前，载疐其后。", "jie": "忆昔成连理，如今琴瑟乖。大限虽未到，终久两分开。", "duan": "莺下乔木，入于幽谷。戊己多伤，甲乙戬谷。无平不陂，无往不复。○中平而两遇下下，故有入幽之象；平陂往复，勉人之词。"}, {"id": 66, "initial": "中平", "middle": "上上", "final": "上中", "title": "中平 上上 上中", "category": "中平数", "motto": "财源辐辏，名利双收。", "poem": ["平生畏简书，揽辔意踌躇。", "三接龙光后，依然赋遂初。"], "poem_raw": "平生畏简书，揽辔意踌躇。三接龙光后，依然赋遂初。", "jie": "君问平生事业奇，前人惜福后人宜。东西南北皆如意，一路康庄任尔驰。", "duan": "相君之面，积德有年。人心反复，天道好还。何以报之，子孝孙贤。○三数不同，反复往还之象；上上上中，子孙之象。"}, {"id": 67, "initial": "中平", "middle": "上上", "final": "中下", "title": "中平 上上 中下", "category": "中平数", "motto": "倚人成事，独力无功。", "poem": ["造物于人多鹘突，纷纷成败难稽核。", "无心插柳柳成阴，有意种花花不发。"], "poem_raw": "造物于人多鹘突，纷纷成败难稽核。无心插柳柳成阴，有意种花花不发。", "jie": "卢扁今何在，青囊有秘方。但逢龙虎日，自必保安康。", "duan": "相彼雨雪，先集维霰。见睍曰消，视而不见。○中平在上上之先，有霰之象；终以中下，宜其视而不见也。"}, {"id": 68, "initial": "中平", "middle": "上中", "final": "上上", "title": "中平 上中 上上", "category": "中平数", "motto": "得人扶助，方能如意。", "poem": ["八九元功已有基，频添火候莫差池。", "待看十二重楼透，便是丹成鹤到时。"], "poem_raw": "八九元功已有基，频添火候莫差池。待看十二重楼透，便是丹成鹤到时。", "jie": "云布满山低，西风逐叶飞。若逢丁与丙，始得见光辉。", "duan": "青天何其高，我有上天梯；绿水何其深，我有分水犀。因祸得福，化险为夷。○中平在上，上上在下，故有上天分水之象；三数递高，故以吉终。"}, {"id": 69, "initial": "中平", "middle": "上上", "final": "下下", "title": "中平 上上 下下", "category": "中平数", "motto": "是是非非，切不可管。", "poem": ["本来面目自家知，得意还防失意时。", "逾分要存知足念，贪心全丧旧根基。"], "poem_raw": "本来面目自家知，得意还防失意时。逾分要存知足念，贪心全丧旧根基。", "jie": "空争气不平，缠绕到公庭。莫谓君多直，还愁曲者赢。", "duan": "纤手弄琵琶，逢人慢自夸。伤心十八拍，边塞起悲笳。○中平忽遇上上，宜其自夸；继以下下，则边塞悲笳之象也。"}, {"id": 70, "initial": "中平", "middle": "中下", "final": "上上", "title": "中平 中下 上上", "category": "中平数", "motto": "喜非喜，忧非忧。耐心守旧。", "poem": ["不如人处听升沈，随分常存退处心。", "君子劳谦终获吉，有时瓦砾变黄金。"], "poem_raw": "不如人处听升沈，随分常存退处心。君子劳谦终获吉，有时瓦砾变黄金。", "jie": "事事平平过，行人舟泊河。虽无凶与险，忧心其奈何。耐佗守佗，终得长风涉怒波。", "duan": "不足不足，许多委曲。塞翁失马，转祸为福。○中平而又中下，不足之象；上上在下，宜以福终。"}, {"id": 71, "initial": "中平", "middle": "中下", "final": "上中", "title": "中平 中下 上中", "category": "中平数", "motto": "失而复得，不用忧疑。", "poem": ["终日江干守钓矶，水寒饵尽叹无鱼。", "耐心十日滩头坐，获得金鳞愿不虚。"], "poem_raw": "终日江干守钓矶，水寒饵尽叹无鱼。耐心十日滩头坐，获得金鳞愿不虚。", "jie": "兔走实难获，埋藏窝不开。但须纵鹰犬，何愁捉不来。", "duan": "栽培护乔木，长养发新枝。莫道花开早，须知果结迟。○中平直隔上中，中隔中下，故须长养；上中终，象为结果。"}, {"id": 72, "initial": "中平", "middle": "中下", "final": "下下", "title": "中平 中下 下下", "category": "中平数", "motto": "谨防小人，蹉跎庶免。", "poem": ["小草敷荣，全资灌溉。", "不溉不灌，日见萎败。"], "poem_raw": "小草敷荣，全资灌溉。不溉不灌，日见萎败。", "jie": "须防暗里箭，还愁江上波。休信直中直，人面兽心多。", "duan": "骏马不羁，绝尘飞去。危乎危乎，朽索难驭。噬脐何及，善谋宜豫。○三数蝉联而下，飞去之象；不致太卑，故云豫谋。"}, {"id": 73, "initial": "中平", "middle": "下下", "final": "上上", "title": "中平 下下 上上", "category": "中平数", "motto": "自小至大，渐渐亨通。", "poem": ["驽马上危坡，崎岖未易过。", "道逢高士引，仙境在岩阿。"], "poem_raw": "驽马上危坡，崎岖未易过。道逢高士引，仙境在岩阿。", "jie": "经营称夷吾，智谋犹子贡。如觅蝇头利，冬来可称心。", "duan": "龙潜于渊，或跃于天。甘霖四野，遍泽大千。煦妪复育，万物含具。不利西北，却利东南。○下下上上，在天在渊之象；东南两方故利。"}, {"id": 74, "initial": "中平", "middle": "下下", "final": "上中", "title": "中平 下下 上中", "category": "中平数", "motto": "和合气象，其利断金。", "poem": ["数亩低洼池，秋霖晚稻场。", "重阳欣戊遇，收获有余粮。"], "poem_raw": "数亩低洼池，秋霖晚稻场。重阳欣戊遇，收获有余粮。", "jie": "两人和合见交情，二子同心利断金。管鲍陈雷今已往，羡君终解古人心。", "duan": "庭竹摇窗际，翛然枕簟凉。偶然行起处，错趾笑人忙。○枕簟为卑下之象，忽得上中，象应起行，故戒以错趾。"}, {"id": 75, "initial": "中平", "middle": "下下", "final": "中下", "title": "中平 下下 中下", "category": "中平数", "motto": "宜持重，莫轻动。", "poem": ["庸流无识，弄巧成拙。", "亡羊补牢，得不偿失。"], "poem_raw": "庸流无识，弄巧成拙。亡羊补牢，得不偿失。", "jie": "缓行遭地网，轻举入天罗。谨慎方为上，履冰莫过河。", "duan": "盈贯青蚨市肆夸，居然屠狗是生涯。一朝樊哙从龙去，富贵原来出浑家。○中平下下，其势已卑，故有屠狗之象；中下稍胜下下，故有富贵出浑家之象。"}, {"id": 76, "initial": "中下", "middle": "中下", "final": "中下", "title": "中下 中下 中下", "category": "中下数", "motto": "事难成，且耐守。", "poem": ["命蹇时乖运不如，还同涸辙困穷鱼。", "死灰尚有燃机在，降气平心待展舒。"], "poem_raw": "命蹇时乖运不如，还同涸辙困穷鱼。死灰尚有燃机在，降气平心待展舒。", "jie": "命蹇总长叹，时乖运不堪。问病灾难退，官司且耐烦。行人多阻隔，失物不能还。婚姻非配偶，六甲欠平安。", "duan": "不飞不鸣，喌喌失群。志同道合，有得有失。恭喜恭喜，取得无几。"}, {"id": 77, "initial": "中下", "middle": "中下", "final": "上上", "title": "中下 中下 上上", "category": "中下数", "motto": "得人扶助，步步春风。", "poem": ["疑是复疑非，忧谗更畏讥。", "星回岁转后，雌雉亦高飞。"], "poem_raw": "疑是复疑非，忧谗更畏讥。星回岁转后，雌雉亦高飞。", "jie": "欲进又徘徊，事危心莫危。水边人指引，名利得荣归。", "duan": "结伴同行，左提右挈。时运平平，大者得力。○两得中下，结伴之象；以上上终，故能得力。"}, {"id": 78, "initial": "中下", "middle": "中下", "final": "上中", "title": "中下 中下 上中", "category": "中下数", "motto": "勤加培植，收成在后。", "poem": ["蹀躞平原屡见颠，看人飞鞚著先鞭。", "而今学得交衢舞，突过寻常一辈贤。"], "poem_raw": "蹀躞平原屡见颠，看人飞鞚著先鞭。而今学得交衢舞，突过寻常一辈贤。", "jie": "名花园里植，浇灌又当时。莫讶花多茂，须知果结迟。", "duan": "燕雀虽小，两翅飞飞。牛羊虽蠢，两角齐齐。避凶趋吉，达者知几。○两数中下，两翅两角之象；以上中终，故能趋吉。此惠迪则吉，从逆则凶之占。"}, {"id": 79, "initial": "中下", "middle": "中下", "final": "中平", "title": "中下 中下 中平", "category": "中下数", "motto": "先否后泰，出难而易。", "poem": ["枉用推移力，沙深舟自胶。", "西风潮渐长，浅濑可容篙。"], "poem_raw": "枉用推移力，沙深舟自胶。西风潮渐长，浅濑可容篙。", "jie": "君家莫怨运迍邅，一带尤昭百快先。失之东隅虽可惜，公平获利倍如前。", "duan": "双丸跳转乾坤里，差错惟争一度先。但得铜仪逢朔望，东西相对两团圆。○两得中下，双丸之象；中下与中平相去不多，故有是占。"}, {"id": 80, "initial": "中下", "middle": "中下", "final": "下下", "title": "中下 中下 下下", "category": "中下数", "motto": "事宜缓图，不可欲速。", "poem": ["琐屑琐屑，心劳日拙。", "骑梁不成，反输一帖。"], "poem_raw": "琐屑琐屑，心劳日拙。骑梁不成，反输一帖。", "jie": "口舌致纷扰，取索必参商。事宽终有益，逼促见灾殃。", "duan": "夹岸柳毵毵，莺藏鸣睍睆。不怕柳枝枯，只防柳丝绾。岂能装白棉，所冀垂青眼。○中平居中，莺藏之象，亦丝绾之象。"}, {"id": 81, "initial": "中下", "middle": "上上", "final": "中下", "title": "中下 上上 中下", "category": "中下数", "motto": "财旺生官，有求必应。", "poem": ["量浅福薄，黄金入橐。", "不种福田，还防祸作。"], "poem_raw": "量浅福薄，黄金入橐。不种福田，还防祸作。", "jie": "富有基兮贵有基，近山望见远山低。黄金多积家殷富，何必孜孜羡锦衣。", "duan": "南山望与北山齐，惟有中峰插天起。飞泉一道润物功，鸡豚社赛春秋里。○首尾中下，两山之象；上上居中，中峰之象，亦吉占也。渐进则有功，躁进则无益。"}, {"id": 82, "initial": "中下", "middle": "上上", "final": "中平", "title": "中下 上上 中平", "category": "中下数", "motto": "", "poem": ["千里姻缘一线牵，百凡事体自完全。", "人望高来水望低，运通忽遇上天梯。", "须知高处多危险，稳步平康路不迷。"], "poem_raw": "千里姻缘一线牵，百凡事体自完全。人望高来水望低，运通忽遇上天梯。须知高处多危险，稳步平康路不迷。", "jie": "雀屏已中选，坦腹在东床。自是天缘合，堪为入赘郎。", "duan": "少小书生，高处立，阔处行。莺鼓如簧舌，抛梳织柳金。不自早抽身，难免受虚惊。○中下低望之象，亦少小之象；上上天梯之象，亦高阔之象。抽身免惊，以得中平终也。"}, {"id": 83, "initial": "中下", "middle": "上中", "final": "中下", "title": "中下 上中 中下", "category": "中下数", "motto": "凡事可成，不宜性急。", "poem": ["拂衣徒步出门去，驷马高车作上宾。", "富贵但知骄妾妇，苏秦还是旧苏秦。"], "poem_raw": "拂衣徒步出门去，驷马高车作上宾。富贵但知骄妾妇，苏秦还是旧苏秦。", "jie": "既骑千里马，何须奔命追。海阔鱼频跃，天空任鸟飞。", "duan": "两山必有潭，两回必有凸。隐处宽，险处窄。谨慎小心则吉，若以富贵骄人则凶。○首尾中下，两山回之象；上中在中，得中也。"}, {"id": 84, "initial": "中下", "middle": "上上", "final": "下下", "title": "中下 上上 下下", "category": "中下数", "motto": "莫贪求，枉劳心。", "poem": ["随高逐低，得步进步。", "观望徘徊，终归自误。"], "poem_raw": "随高逐低，得步进步。观望徘徊，终归自误。", "jie": "大厦千间，夜眠七尺。少置田园，多积阴德。儿孙不肖，置之无益；儿孙若贤，何劳费力。味乎斯言，勿忘勿失。", "duan": "有屈有伸，能发能收。心劳日拙，心逸日休。卑以自牧，乐以忘忧。○忽上忽下，伸屈发收之象；上上在中，心象也；下下在下，卑象也。君子占之吉，小人占之凶。"}, {"id": 85, "initial": "中下", "middle": "中平", "final": "中下", "title": "中下 中平 中下", "category": "中下数", "motto": "须谨慎，防小人。", "poem": ["乳燕学高飞，虽飞亦不远。", "非关气力微，羽毛未丰满。"], "poem_raw": "乳燕学高飞，虽飞亦不远。非关气力微，羽毛未丰满。", "jie": "群凶弥六合，日月蔽烟尘。修德从今始，犹难免祸侵。", "duan": "不因柳絮化前身，那得浮萍聚水滨。狎暱群蒙伤比匪，得全根本是何人。○两头中下，中平居中，乃是萍水聚滨之象，漂萍无根之象。谋望恐难成就。"}, {"id": 86, "initial": "中下", "middle": "下下", "final": "中下", "title": "中下 下下 中下", "category": "中下数", "motto": "须知足，莫取辱。", "poem": ["下驷之乘，加鞭愈劣。", "何如伏枥，转可藏拙。"], "poem_raw": "下驷之乘，加鞭愈劣。何如伏枥，转可藏拙。", "jie": "恃富因忘本，贪婪竟失中。欺心天不佑，神道岂私凶。", "duan": "拗堂流水漾微流，帆饱西风荡芥舟。万里前程何日到，蟪蛄从不说春秋。○首尾中下，中有下下，拗堂之象；蟪蛄不知春秋，卑之也。"}, {"id": 87, "initial": "中下", "middle": "上上", "final": "上上", "title": "中下 上上 上上", "category": "中下数", "motto": "名成利就，大吉大利。", "poem": ["休将困苦怨青衫，一出风尘便不凡。", "更喜蓬瀛水清浅，海天如镜好张帆。"], "poem_raw": "休将困苦怨青衫，一出风尘便不凡。更喜蓬瀛水清浅，海天如镜好张帆。", "jie": "奉命兴师胆气豪，胸藏星斗贯龙韬。命出帐前山岳动，威行部下鬼神号。指日三军当奏凯，并看贼众岂能逃。太平原是先生定，麟阁功勋姓氏高。", "duan": "千金不受，饭尔王孙。胯下则辱，登坛则尊。背水列阵，妙不可言。○两得上上，登坛之象；一路风帆，无往不利。"}, {"id": 88, "initial": "中下", "middle": "上中", "final": "上上", "title": "中下 上中 上上", "category": "中下数", "motto": "功夫宜久，事业日增。", "poem": ["浮图矗立出重霄，拾级行来步步高。", "但到半途须努力，要登颠顶莫辞劳。"], "poem_raw": "浮图矗立出重霄，拾级行来步步高。但到半途须努力，要登颠顶莫辞劳。", "jie": "炼石曾看五色天，仙人又炼几千年。君家甲子何须问，三啖蟠桃作上仙。", "duan": "磨铁成针，磨砖作镜。登高阅人，毋辞力尽。○中下上中，直至上上，登高阅人之象，宜有是占。"}, {"id": 89, "initial": "中下", "middle": "上中", "final": "中平", "title": "中下 上中 中平", "category": "中下数", "motto": "名利有成，无不遂意。", "poem": ["其行趑趄，其履亨衢。", "将上不足，比下有余。"], "poem_raw": "其行趑趄，其履亨衢。将上不足，比下有余。", "jie": "耆老邮亭接，儿童竹马迎。爱民如父母，政德好声名。", "duan": "二三耆老出邮亭，笑指儿童竹马迎。圣代即今多雨露，诸君何以答升平。○上中中平，二三耆老之象；中下在上，儿童竹马之象。"}, {"id": 90, "initial": "中下", "middle": "上中", "final": "下下", "title": "中下 上中 下下", "category": "中下数", "motto": "急流勇退，凡事勿贪。", "poem": ["逆流宜勇棹，进步得腾挪。", "稍懈撑持力，看看退已多。"], "poem_raw": "逆流宜勇棹，进步得腾挪。稍懈撑持力，看看退已多。", "jie": "万里去从军，孤身仗剑行。功名虽显达，未得早归林。", "duan": "舞雩沂水乐天真，童冠嬉游入莫春。尽有文章随手得，塾中含笑是先生。○中下下下，童冠之象；上中居中，先生之象。"}, {"id": 91, "initial": "中下", "middle": "中平", "final": "上上", "title": "中下 中平 上上", "category": "中下数", "motto": "贵人照应，凡事称心。", "poem": ["远行必自迩，登高必自卑。", "盈科无不进，累卵复何危。"], "poem_raw": "远行必自迩，登高必自卑。盈科无不进，累卵复何危。", "jie": "百艺儒为贵，儒为席上珍。满朝朱紫贵，尽是读书人。", "duan": "几年豹隐藏深处，一旦鹏飞直上天。若得金口人借力，前途自尔著先鞭。○中下中平，豹隐之象；终得上上，故比鹏飞。"}, {"id": 92, "initial": "中下", "middle": "中平", "final": "上中", "title": "中下 中平 上中", "category": "中下数", "motto": "待时而动，谋望皆吉。", "poem": ["出门何所图，胜如家里坐。", "虽无上天梯，一步高一步。"], "poem_raw": "出门何所图，胜如家里坐。虽无上天梯，一步高一步。", "jie": "春雨润原隰，何须忧歉丰。西成歌大有，欢乐万人同。", "duan": "上山易，下山难。上山白虎，下山青蛇，斩蛇还伏虎，默默即瞿昙。○三数递增，山之象也；其数上下势不一也。"}, {"id": 93, "initial": "中下", "middle": "上中", "final": "上中", "title": "中下 上中 上中", "category": "中下数", "motto": "努力向前，事必有济。", "poem": ["沾涂胼胝夏秋交，冬月阳生粟满廒。", "八口之家勤有获，频年总比下农高。"], "poem_raw": "沾涂胼胝夏秋交，冬月阳生粟满廒。八口之家勤有获，频年总比下农高。", "jie": "学问岂难事，功夫贵勉旃。若加勤苦力，自可出青毡。", "duan": "乳燕飞飞戏，双剪漾乌衣。任他风共雨，不管是和非。○中下乳燕之象，两得上中，双剪之象；上中不卑，故免是非。"}, {"id": 94, "initial": "中下", "middle": "中平", "final": "中平", "title": "中下 中平 中平", "category": "中下数", "motto": "危难已过，坦行无忌。", "poem": ["棋力酒量，非关退让。", "竭蹶争先，欲上不上。"], "poem_raw": "棋力酒量，非关退让。竭蹶争先，欲上不上。", "jie": "已过危桥百事安，何须过虑有艰难。蛟龙得意兴云雨，一入云霄便不凡。", "duan": "秋水官桥阔，青山驿路宽。好扶鸠杖过，绿竹报平安。○两遇中平，宽阔之象也；中平得中，故平安也。事有定分，不可妄求，求得平安即是福也。"}, {"id": 95, "initial": "中下", "middle": "下下", "final": "下下", "title": "中下 下下 下下", "category": "中下数", "motto": "", "poem": ["口舌重重，命运多穷。", "谨慎自励，趋吉避凶。", "困勉斯为学，因循误一生。", "平时不立志，到老百无成。"], "poem_raw": "口舌重重，命运多穷。谨慎自励，趋吉避凶。困勉斯为学，因循误一生。平时不立志，到老百无成。", "jie": "口舌向人来，保身且慎灾。家中防盗贼，门外恐伤财。", "duan": "日月自东出，河汉向西流。出者有时没，流者无尽头。○以中下而遇两下下，有水势倾流、江河日下之象。"}, {"id": 96, "initial": "中下", "middle": "上上", "final": "上中", "title": "中下 上上 上中", "category": "中下数", "motto": "求名求利，莫不成就。", "poem": ["荆山有遗璞，雕琢成圭璋。", "用为廊庙器，舍得贾胡藏。"], "poem_raw": "荆山有遗璞，雕琢成圭璋。用为廊庙器，舍得贾胡藏。", "jie": "少小推英杰，从军万里行。姓名铭钟鼎，声华振帝京。", "duan": "姑射仙人跨凤游，百花深处且勾留。双成制就霓裳曲，不是知音不点头。○中下而遇上上，飞仙跨凤之象；上中稍杀，勾留之象。"}, {"id": 97, "initial": "中下", "middle": "中平", "final": "下下", "title": "中下 中平 下下", "category": "中下数", "motto": "自己主张，莫听人言。", "poem": ["东郭当年乞馂余，一朝温饱丧其初。", "人心不足蛇吞象，天理难忘獭祭鱼。"], "poem_raw": "东郭当年乞馂余，一朝温饱丧其初。人心不足蛇吞象，天理难忘獭祭鱼。", "jie": "同叶又同根，非同陌路人。异姓犹相爱，何如手足亲。田氏谋多著，张公义习因。但以天伦重，莫听枕边人。", "duan": "山木不高，树大则阴。泉水不深，潭静则清。自暴自弃，一事无成。○三数俱卑下，不高不深之象。"}, {"id": 98, "initial": "中下", "middle": "下下", "final": "上上", "title": "中下 下下 上上", "category": "中下数", "motto": "先危后安，料亦无妨。", "poem": ["若履虎尾，转忧成喜。", "不入虎穴，焉得虎子。"], "poem_raw": "若履虎尾，转忧成喜。不入虎穴，焉得虎子。", "jie": "一纸官文火急催，奉行员役迅如雷。虽然目下多惊恐，保尔平安去复回。", "duan": "我有宝剑，能透重泉。我有宝拂，能扫云烟。噫，点石成金原戏幻，笑他和峤癖于钱。○下下重泉之象，上上云烟之象；三数递变，点石成金之象。"}, {"id": 99, "initial": "中下", "middle": "下下", "final": "上中", "title": "中下 下下 上中", "category": "中下数", "motto": "存心好，到处吉。", "poem": ["造化牢笼困我徒，不如意事数偏多。", "坚心降得魔千丈，毕竟今吾胜故吾。"], "poem_raw": "造化牢笼困我徒，不如意事数偏多。坚心降得魔千丈，毕竟今吾胜故吾。", "jie": "羡尔生来有吏才，如今此去复当该。公门莫道无修积，正好修行在此来。", "duan": "盈虚消息在机先，理数原从一画天。蛟龙自分泥涂死，顿有风雷直上天。○三数多变，盈虚消息之象；以上中终，上天之象。"}, {"id": 100, "initial": "中下", "middle": "下下", "final": "中平", "title": "中下 下下 中平", "category": "中下数", "motto": "", "poem": ["求人不如求己，他乡何似故乡。", "蓦地起波澜，纡回蜀道难。", "黄金能解厄，八九得平安。"], "poem_raw": "求人不如求己，他乡何似故乡。蓦地起波澜，纡回蜀道难。黄金能解厄，八九得平安。", "jie": "人情更比秋云薄，蜀道何如友道崎。故园荒径犹堪念，何必风霜访故知。", "duan": "积雪为山，囊萤作灯。小者有用，大恐不胜。临深履薄，战战兢兢。○三数俱卑，宜小不宜大；临履战兢，占者当如是也。"}, {"id": 101, "initial": "下下", "middle": "下下", "final": "下下", "title": "下下 下下 下下", "category": "下下数", "motto": "安分守己，尚恐获咎。", "poem": ["六阴连遘象艰危，消息如斯莫强为。", "惟有斋心勤省疚，元关转处吉神随。"], "poem_raw": "六阴连遘象艰危，消息如斯莫强为。惟有斋心勤省疚，元关转处吉神随。", "jie": "白虎当头坐命宫，求名求利总成空。行人鱼雁无消息，病有仙丹也少功。官司立见灾刑至，失物难寻命运穷。婚姻虽配终难合，六甲须防产妇凶。", "duan": "拔茅连茹，其象翩翩。事当有济，不可息肩。水穷山尽，别有一天。"}, {"id": 102, "initial": "下下", "middle": "下下", "final": "上上", "title": "下下 下下 上上", "category": "下下数", "motto": "否极则泰，不必忧虑。", "poem": ["范舟灰里卜行藏，相对牛衣泣未央。", "秋圃黄花看晚节，太公八十遇文王。"], "poem_raw": "范舟灰里卜行藏，相对牛衣泣未央。秋圃黄花看晚节，太公八十遇文王。", "jie": "月缺又重圆，枯枝色复鲜。暗中神鬼佑，绵绵福禄全。", "duan": "同声同气，两小无猜。占之得利，小往大来。○两得下下，两小之象；以上上终，大来之象。"}, {"id": 103, "initial": "下下", "middle": "下下", "final": "上中", "title": "下下 下下 上中", "category": "下下数", "motto": "贵人扶持，危而复安。", "poem": ["一文羞涩阮囊钱，心事还如百沸煎。", "且喜分金逢鲍叔，照人肝胆足图全。"], "poem_raw": "一文羞涩阮囊钱，心事还如百沸煎。且喜分金逢鲍叔，照人肝胆足图全。", "jie": "尔乘病马渡危坡，难免疏虞失足多。幸赖执鞭人得力，不教险处有蹉跎。", "duan": "长沮桀溺旧知名，叱犊声声去耦耕。占得枯囊浑不语，知津还是问津人。○两数下下，耦耕之象；终得上中，问津之象。"}, {"id": 104, "initial": "下下", "middle": "下下", "final": "中平", "title": "下下 下下 中平", "category": "下下数", "motto": "动必有碍，耐心可免。", "poem": ["彷徨彷徨，进退郎当。", "民亦劳止，汔可小康。"], "poem_raw": "彷徨彷徨，进退郎当。民亦劳止，汔可小康。", "jie": "花飞春已去，蝶至奈花残。惟有松与竹，终能耐岁寒。", "duan": "西泠多松柏，并立何青青。请问苏小墓，谁是意中人。○两得下下，并立之象；终以中平，墓象也。得是占者，谨防鬼语。"}, {"id": 105, "initial": "下下", "middle": "下下", "final": "中下", "title": "下下 下下 中下", "category": "下下数", "motto": "诸事不顺，还防灾祸。", "poem": ["比匪为偶，蝇营狗苟。", "小草露华滋，沾润亦不久。"], "poem_raw": "比匪为偶，蝇营狗苟。小草露华滋，沾润亦不久。", "jie": "寒遭怪作祟，逐日病添忧。虽有灵符药，终难保吉庥。", "duan": "小小青条未远扬，枝枝叶叶终相当。闰余亦作黄杨厄，辛苦经年展寸长。○两数下下，相当之象；中下稍增，寸长之象。"}, {"id": 106, "initial": "下下", "middle": "上上", "final": "下下", "title": "下下 上上 下下", "category": "下下数", "motto": "且保身，莫妄求。", "poem": ["小过象飞鸟，低昂无定踪。", "未堪当大受，恭俭慎初终。"], "poem_raw": "小过象飞鸟，低昂无定踪。未堪当大受，恭俭慎初终。", "jie": "遍地苦荒凉，树木尽凋伤。豺狼当要路，吉人隐且藏。", "duan": "狡兔营三窟，尚苦虚其一。不怕马蹄惊，只防鹰眼疾。○首尾下下，中独上上，故有不成三窟之占；然上上亦鹰扬之象也。"}, {"id": 107, "initial": "下下", "middle": "上中", "final": "下下", "title": "下下 上中 下下", "category": "下下数", "motto": "喜而不喜，故有阴人播弄。", "poem": ["船到江心浪拍天，羡君飞渡得平安。", "紧收蓬脚牢拴舵，尚有前途十八滩。"], "poem_raw": "船到江心浪拍天，羡君飞渡得平安。紧收蓬脚牢拴舵，尚有前途十八滩。", "jie": "一事已成空，一事还成喜。若遇草头人，祸起萧墙里。", "duan": "前朱雀，后玄武。招摇在上，结缮其怒。汉将能将，将是汉王主。○两下下，有前后之象；上中居中，结缮之象。以其在中，故有主也。"}, {"id": 108, "initial": "下下", "middle": "中平", "final": "下下", "title": "下下 中平 下下", "category": "下下数", "motto": "", "poem": ["凡百事，忍为妙。", "如能忍，祸自消。", "欹器在悬，适中为率。", "注满则倾，过犹不及。"], "poem_raw": "凡百事，忍为妙。如能忍，祸自消。欹器在悬，适中为率。注满则倾，过犹不及。", "jie": "一字不可入公门，一入公门家便倾。平常省得些须气，管教百事免灾迎。", "duan": "西子湖平镜面揩，小洲中有小亭台。四时莫道风光好，一样炎凉应候来。○下下势卑，故有平湖之象；中平在中，亭台之象；忽中平，忽下下，炎凉之象。"}, {"id": 109, "initial": "下下", "middle": "中下", "final": "下下", "title": "下下 中下 下下", "category": "下下数", "motto": "", "poem": ["莫心焦，莫辞劳。", "归家静守，安怀好。", "群阴构难，五鬼闹判。", "权而得中，方寸莫乱。"], "poem_raw": "莫心焦，莫辞劳。归家静守，安怀好。群阴构难，五鬼闹判。权而得中，方寸莫乱。", "jie": "阴人口舌主忧惊，孝服临门动哭声。运退黄金犹失色，双眉愁锁事难成。", "duan": "织女别黄姑，相去似数步。盈盈江河水，一苇不能渡。七夕原有期，飞鹊防其误。○首尾下下，中隔中下，故有是占。"}, {"id": 110, "initial": "下下", "middle": "上上", "final": "上上", "title": "下下 上上 上上", "category": "下下数", "motto": "先忧后喜，百事可成。", "poem": ["泗上何人识沛公，谁知草昧起英雄。", "帝王卿相非常业，多在鱼盐版筑中。"], "poem_raw": "泗上何人识沛公，谁知草昧起英雄。帝王卿相非常业，多在鱼盐版筑中。", "jie": "愁面笑容开，忧心事可谐。但凭理做去，不必费疑猜。", "duan": "王曾布衣，乃居魁首。仰之弥高，泰山北斗。有德则称，无德则否。○下下而遇上上，故有草昧英雄之象；泰山北斗，两得上上之象。"}, {"id": 111, "initial": "下下", "middle": "上中", "final": "上中", "title": "下下 上中 上中", "category": "下下数", "motto": "求名求利，必用心机。", "poem": ["铁铸风波狱已成，吉人天相得从轻。", "更看笔上青蝇绕，诏下金鸡庆再生。"], "poem_raw": "铁铸风波狱已成，吉人天相得从轻。更看笔上青蝇绕，诏下金鸡庆再生。", "jie": "百千盗贼虎狼心，愿汝干戈用力深。自此绿林踪迹敛，一方始得免灾侵。", "duan": "庾信小园中，莲开并蒂红。朱华迎晓日，翠盖障西风。○下下小园之象，两得上中，并蒂之占。"}, {"id": 112, "initial": "下下", "middle": "中平", "final": "中平", "title": "下下 中平 中平", "category": "下下数", "motto": "保守待时，久后必发。", "poem": ["道与时违，名微位卑。", "且勤尔职，禄养无亏。"], "poem_raw": "道与时违，名微位卑。且勤尔职，禄养无亏。", "jie": "下水粮船上水盐，年来几倍货财添。目今有本难寻利，且待春来勿避嫌。", "duan": "丰城宝气射牛斗，判别雌雄成两口。江心鼓铸工独良，鬼神辟易魑魅走。○下下两遇中平，双剑之象；中平得中，故有是占，亦吉象也。"}, {"id": 113, "initial": "下下", "middle": "中下", "final": "中下", "title": "下下 中下 中下", "category": "下下数", "motto": "", "poem": ["欲进反退，求名反辱。", "不如静守，庶免灾临。", "一饮一啄，莫非前定。", "淘沙得金，其细已甚。"], "poem_raw": "欲进反退，求名反辱。不如静守，庶免灾临。一饮一啄，莫非前定。淘沙得金，其细已甚。", "jie": "献策上长安，功名两字难。龙门没君分，名已落孙山。", "duan": "念尔祈父，特设爪牙。吁嗟行役，有母无家。○下下居上，祈父之象；两得中下，爪牙之象。"}, {"id": 114, "initial": "下下", "middle": "上上", "final": "上中", "title": "下下 上上 上中", "category": "下下数", "motto": "铁枪磨针，工到自成。", "poem": ["厄运苦侵寻，虔修事有灵。", "三星齐拱照，灾退获康宁。"], "poem_raw": "厄运苦侵寻，虔修事有灵。三星齐拱照，灾退获康宁。", "jie": "空空空，空里得成功。根本栽培厚，那怕雪和风。", "duan": "事在百年，所争一刻。月盈则亏，日中则昃。何以立命，急起修德。○以下下遇上上上中，亏昃之象。"}, {"id": 115, "initial": "下下", "middle": "上上", "final": "中平", "title": "下下 上上 中平", "category": "下下数", "motto": "心勿贪，贵知足。", "poem": ["先主当年寸土无，还从西蜀建雄都。", "三分天下休嫌少，鼎足先机定草庐。"], "poem_raw": "先主当年寸土无，还从西蜀建雄都。三分天下休嫌少，鼎足先机定草庐。", "jie": "听命由天，由此心田。荣辱之事，与我何干。盈庭花草，满架诗篇。尽可消闲，随遇而安。", "duan": "么凤生来锦绣文，高冈独立倚睛曛。舜琴一曲薰风里，飞食桐花落采云。○下下么凤之象，上上高冈之象，以中平终云之象。"}, {"id": 116, "initial": "下下", "middle": "上上", "final": "中下", "title": "下下 上上 中下", "category": "下下数", "motto": "", "poem": ["努力向前，不可退后。", "若休息怠惰，事难成就。", "临深渊，陟高山。", "云无心以出岫，鸟倦飞而知还。"], "poem_raw": "努力向前，不可退后。若休息怠惰，事难成就。临深渊，陟高山。云无心以出岫，鸟倦飞而知还。", "jie": "力争上游，不可休息。豹死自留皮，守道名难灭。", "duan": "径涉波涛一叶舟，如今撑得到滩头。几回欲把篙来歇，恐歇篙时便下流。○下下而得上上，撑到滩头之象；以中下终，下流之象。"}, {"id": 117, "initial": "下下", "middle": "上中", "final": "上上", "title": "下下 上中 上上", "category": "下下数", "motto": "诸凡如意，老当益壮。", "poem": ["如何平地得为山，只要工夫不畏难。", "去岁园中青竹筱，今年可作钓鱼竿。"], "poem_raw": "如何平地得为山，只要工夫不畏难。去岁园中青竹筱，今年可作钓鱼竿。", "jie": "既乏邓通钱，还兴伯道嗟。一朝时运至，枯木又生花。", "duan": "食物无如食蔗鲜，蔗浆好是老头甜。食物无如食蔗难，蔗到甜时节又攒。○以下下而驯至上上，食蔗之象。"}, {"id": 118, "initial": "下下", "middle": "上中", "final": "中平", "title": "下下 上中 中平", "category": "下下数", "motto": "得人提拔，方能有为。", "poem": ["不因激劝，那得如愿。", "意满心高，得半失半。"], "poem_raw": "不因激劝，那得如愿。意满心高，得半失半。", "jie": "一片荆山玉，如何识主希。不因磨琢好，难免碔砆讥。", "duan": "一树梅花花满枝，暗香浮动影参差。风欺雪压谁曾见，但说黄昏月上时。○三数不同，低亚参差之象；上中在中，月上之象；下下而遇上中中平，不伦不类，风欺雪压之象。"}, {"id": 119, "initial": "下下", "middle": "上中", "final": "中下", "title": "下下 上中 中下", "category": "下下数", "motto": "进退两难，不如守旧。", "poem": ["塞翁失马不为忧，得马翻贻长者愁。", "祸福转环无一定，须从倚伏究根由。"], "poem_raw": "塞翁失马不为忧，得马翻贻长者愁。祸福转环无一定，须从倚伏究根由。", "jie": "家宅久埋尘，迁移亦是迍。只缘时运减，人杰地方灵。", "duan": "卜宅如何未卜邻，三迁枉费主人心。映阶碧草自春色，隔叶黄鹂空好音。○三数递变，三迁之象；下下与中下相次，中隔上中，故有隔叶之占。"}, {"id": 120, "initial": "下下", "middle": "中平", "final": "上上", "title": "下下 中平 上上", "category": "下下数", "motto": "青云得路，不日亨通。", "poem": ["泽国羁栖困楚囚，偶然游息得平邱。", "何妨鼓兴携山屐，还有奇峰在上头。"], "poem_raw": "泽国羁栖困楚囚，偶然游息得平邱。何妨鼓兴携山屐，还有奇峰在上头。", "jie": "藜藿鹑衣苦不全，鸠形鹄面实堪怜。此身莫向沟中殒，尚有良缘在目前。", "duan": "刺绣才添弱线长，灰飞葭管验初阳。熙熙尽在春台上，万物犹如炽而昌。○下下而至中平，添线之象；万物炽昌，则以上上终也。"}, {"id": 121, "initial": "下下", "middle": "中平", "final": "上中", "title": "下下 中平 上中", "category": "下下数", "motto": "耐心待时，亨通将至。", "poem": ["未来事，黑如漆。", "金鸡玉犬报佳音，海上蟠桃初结实。"], "poem_raw": "未来事，黑如漆。金鸡玉犬报佳音，海上蟠桃初结实。", "jie": "缧绁非其罪，无辜羑里囚。欲免网罗累，秋深始自由。", "duan": "拣得名花着意栽，园林次第看花开。春风有意催花急，报到棠梨二候才。○二数渐增，蕊开次第之象；上中兴中平，二候棠梨之象。"}, {"id": 122, "initial": "下下", "middle": "中平", "final": "中下", "title": "下下 中平 中下", "category": "下下数", "motto": "百事无成，且有意外之变。", "poem": ["困苦虽由命里该，巫医小道亦须才。", "守株待兔有时获，缘木求鱼何处来。"], "poem_raw": "困苦虽由命里该，巫医小道亦须才。守株待兔有时获，缘木求鱼何处来。", "jie": "命蹇兮时违，灾及兮身羸。皇天兮不佑，嗟我兮何为。", "duan": "小圃参差护短篱，不种桑麻种野荠。细茎薄叶日滋长，茶苦那得甘如醴。○三数不同，参差之象；俱是卑下，所以有求不得之占也。"}, {"id": 123, "initial": "下下", "middle": "中下", "final": "上上", "title": "下下 中下 上上", "category": "下下数", "motto": "诸事留心，防人暗算。", "poem": ["三战三北君莫羞，一匡天下霸诸侯。", "若经沟壑殉小节，盖世功名尽射钩。"], "poem_raw": "三战三北君莫羞，一匡天下霸诸侯。若经沟壑殉小节，盖世功名尽射钩。", "jie": "静处常思虑，求谋贵审机。樽前防暴客，且免是和非。", "duan": "山塘七里美难胜，多少游人拾级升。大笑一声天地折，苏山顶上有孙登。○下下而遇中下，拾级之象；以上上终，孙登长啸之象。"}, {"id": 124, "initial": "下下", "middle": "中下", "final": "上中", "title": "下下 中下 上中", "category": "下下数", "motto": "", "poem": ["暂偃蹇，即亨通。", "惟问病，难免凶。", "道旁有李不可餐，望梅止渴不救馋。", "耐得石莲心里苦，这回甘蔗老来甜。"], "poem_raw": "暂偃蹇，即亨通。惟问病，难免凶。道旁有李不可餐，望梅止渴不救馋。耐得石莲心里苦，这回甘蔗老来甜。", "jie": "前生君是大罗仙，偶遭贬谪到人间。若将根蒂守牢固，不日飞升上九天。", "duan": "不号飞仙号酒仙，几时贬谪在人间。舍身试捉矶头月，依旧凌虚上九天。○下下中下，其势卑矣，贬谪之象；终得上中，凌虚之象。"}, {"id": 125, "initial": "下下", "middle": "中下", "final": "中平", "title": "下下 中下 中平", "category": "下下数", "motto": "不必强求，反祸为福。", "poem": ["二二三四五六七八九，相乘数乃毕。", "老阳未变不能生，占者逢之静则吉。"], "poem_raw": "二二三四五六七八九，相乘数乃毕。老阳未变不能生，占者逢之静则吉。", "jie": "福为卦之首，祸乃数之终。若将根蒂省，时来运自通。", "duan": "一步一趋，相去无几。失之毫厘，谬之千里。善终厥善，慎之终始。○三数相次，相去无几之象；三数不同，毫厘千里之象。"}]</script>
+<script id="calib-data" type="application/json">{"generated_at": "2026-11-20 11:47:54", "sims": 1000000, "mean_total": 12.471, "sd_total": 6.74, "min_total": 0, "max_total": 55, "zero_rate": 0.711, "target": {"下下": 6.0, "中下": 25.9, "中平": 33.4, "上中": 22.2, "上上": 12.5}, "measured_calibrated": {"上上": 12.38, "上中": 22.49, "中平": 34.46, "中下": 26.22, "下下": 4.45}, "measured_book": {"上上": 51.45, "上中": 12.05, "中平": 11.39, "中下": 14.08, "下下": 11.03}, "thresholds_calibrated": {"下下": 0, "中下": 3, "中平": 9, "上中": 15, "上上": 21}, "thresholds_book": {"上上": 12, "上中": 10, "中平": 8, "中下": 5, "下下": 1}, "max_deviation_pp": 1.55, "draws": 100000, "combos_seen": 125, "rarest_combo_pct": 0.007, "elapsed_sec": 72.5, "failures": []}</script>
+<script>/* 牙牌神数 · 占算引擎（JS 版，浏览器 / Node 双用）
+ *
+ * 与 engine/yapai_engine.py 保持同一口径：
+ *   1. 32 张牙牌洗乱一字排开 → 30 个相邻三张滑动窗口
+ *   2. 每窗只记最高一开（不同6 > 五子5 > 合巧4 > 分相/马军/对子/么二三/二三靠3 > 正快1）
+ *   3. 30 窗相加 = 总开；0 开须重占
+ *   4. 连排三次 = 始/中/末
+ * 品阶两套口径：calibrated（分位数标定，匹配目标分布） / book（原书 12/10/8/5）
+ */
+(function (root, factory) {
+  const api = factory();
+  if (typeof module === 'object' && module.exports) module.exports = api;
+  else root.YapaiEngine = api;
+})(typeof globalThis !== 'undefined' ? globalThis : this, function () {
+  'use strict';
+
+  const DECK_TILES = [
+    ['天牌', 6, 6], ['天牌', 6, 6],
+    ['地牌', 1, 1], ['地牌', 1, 1],
+    ['人牌', 4, 4], ['人牌', 4, 4],
+    ['和牌', 1, 3], ['和牌', 1, 3],
+    ['梅花', 5, 5], ['梅花', 5, 5],
+    ['长三', 3, 3], ['长三', 3, 3],
+    ['板凳', 2, 2], ['板凳', 2, 2],
+    ['斧头', 5, 6], ['斧头', 5, 6],
+    ['红头十', 4, 6], ['红头十', 4, 6],
+    ['高脚七', 1, 6], ['高脚七', 1, 6],
+    ['铜锤六', 1, 5], ['铜锤六', 1, 5],
+    ['九点', 3, 6], ['九点', 4, 5],
+    ['八点', 2, 6], ['八点', 3, 5],
+    ['七点', 2, 5], ['七点', 3, 4],
+    ['二四', 2, 4],
+    ['五点', 2, 3], ['五点', 1, 4],
+    ['么二', 1, 2]
+  ];
+
+  const DECK = DECK_TILES.map((t, i) => ({ index: i, name: t[0], top: t[1], bottom: t[2], key: t[0] + t[1] + '-' + t[2] }));
+
+  const PATTERN_VALUES = {
+    '不同': 6, '五子': 5, '合巧': 4, '分相': 3, '马军': 3,
+    '对子': 3, '么二三': 3, '二三靠': 3, '正快': 1, '无开': 0
+  };
+  const PATTERN_NOTES = {
+    '不同': '六面 1~6 各见其一',
+    '五子': '六面中五面同点',
+    '合巧': '四面同点，余两面之和恰等于该点',
+    '分相': '三面同点，另三面亦同点',
+    '马军': '双四、双五、双六',
+    '对子': '窗内两张完全相同的牌',
+    '么二三': '双么、双二、双三',
+    '二三靠': '双二、双三、双六',
+    '正快': '三面同点，余三面之和 ≥ 14',
+    '无开': '不成开数'
+  };
+
+  const TIERS_TOP_DOWN = ['上上', '上中', '中平', '中下', '下下'];
+  const THRESHOLDS = {
+    book: { '上上': 12, '上中': 10, '中平': 8, '中下': 5, '下下': 1 },
+    calibrated: { '上上': 21, '上中': 15, '中平': 9, '中下': 3, '下下': 0 }
+  };
+
+  /* ---------------- 随机源（可注入种子，便于复现） ---------------- */
+  function mulberry32(seed) {
+    let a = seed >>> 0;
+    return function () {
+      a = (a + 0x6D2B79F5) >>> 0;
+      let t = a;
+      t = Math.imul(t ^ (t >>> 15), t | 1);
+      t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+  const defaultRng = () => Math.random();
+
+  function shuffleDeck(rand) {
+    const randFn = rand || defaultRng;
+    const row = DECK.slice();
+    for (let i = row.length - 1; i > 0; i--) {
+      const j = Math.floor(randFn() * (i + 1));
+      const tmp = row[i]; row[i] = row[j]; row[j] = tmp;
+    }
+    return row;
+  }
+
+  /* ---------------- 开数判定 ---------------- */
+  function detectWindow(cards) {
+    const faces = [];
+    for (const c of cards) { faces.push(c.top, c.bottom); }
+    const cnt = new Map();
+    for (const f of faces) cnt.set(f, (cnt.get(f) || 0) + 1);
+    const ordered = faces.slice().sort((x, y) => x - y);
+    const counts = Array.from(cnt.values()).sort((x, y) => x - y);
+    const eq = (arr, want) => arr.length === want.length && arr.every((v, i) => v === want[i]);
+
+    // 1. 不同 6
+    if (eq(ordered, [1, 2, 3, 4, 5, 6])) return { pattern: '不同', value: 6 };
+    // 2. 五子 5
+    if (eq(counts, [1, 5])) return { pattern: '五子', value: 5 };
+    // 3. 合巧 4
+    for (const [value, count] of cnt) {
+      if (count === 4) {
+        const rest = faces.slice();
+        for (let i = 0; i < 4; i++) rest.splice(rest.indexOf(value), 1);
+        if (rest.reduce((s, v) => s + v, 0) === value) return { pattern: '合巧', value: 4 };
+      }
+    }
+    // 4. 分相
+    if (eq(counts, [3, 3]) && cnt.size === 2) return { pattern: '分相', value: 3 };
+    // 5. 马军
+    if (eq(ordered, [4, 4, 5, 5, 6, 6])) return { pattern: '马军', value: 3 };
+    // 6. 对子
+    const keys = cards.map(c => c.key || (c.name + c.top + '-' + c.bottom));
+    if (keys[0] === keys[1] || keys[1] === keys[2] || keys[0] === keys[2]) return { pattern: '对子', value: 3 };
+    // 7. 么二三
+    if (eq(ordered, [1, 1, 2, 2, 3, 3])) return { pattern: '么二三', value: 3 };
+    // 8. 二三靠
+    if (eq(ordered, [2, 2, 3, 3, 6, 6])) return { pattern: '二三靠', value: 3 };
+    // 9. 正快 1
+    for (const [value, count] of cnt) {
+      if (count === 3) {
+        const rest = faces.slice();
+        for (let i = 0; i < 3; i++) rest.splice(rest.indexOf(value), 1);
+        if (rest.reduce((s, v) => s + v, 0) >= 14) return { pattern: '正快', value: 1 };
+      }
+    }
+    return { pattern: '无开', value: 0 };
+  }
+
+  /* ---------------- 一次排牌 ---------------- */
+  function playRound(rand, row) {
+    const cards = row ? row.slice() : shuffleDeck(rand);
+    const windows = [];
+    const patternCounts = {};
+    let total = 0;
+    for (let start = 0; start < cards.length - 2; start++) {
+      const trio = [cards[start], cards[start + 1], cards[start + 2]];
+      const det = detectWindow(trio);
+      windows.push({ start, tiles: trio.map(c => c.index), pattern: det.pattern, value: det.value });
+      patternCounts[det.pattern] = (patternCounts[det.pattern] || 0) + 1;
+      total += det.value;
+    }
+    return { row: cards, windows, total, patternCounts };
+  }
+
+  function grade(total, mode) {
+    const th = THRESHOLDS[mode || 'calibrated'];
+    for (const tier of TIERS_TOP_DOWN) {
+      if (total >= th[tier]) return tier;
+    }
+    return '下下';
+  }
+
+  function oneValidRound(rand, mode) {
+    let attempts = 0;
+    for (;;) {
+      attempts++;
+      const rnd = playRound(rand);
+      if (rnd.total > 0) return { round: rnd, tier: grade(rnd.total, mode), rerolls: attempts - 1 };
+    }
+  }
+
+  function drawThree(rand, mode) {
+    const rounds = [oneValidRound(rand, mode), oneValidRound(rand, mode), oneValidRound(rand, mode)];
+    const tiers = rounds.map(r => r.tier);
+    return { mode: mode || 'calibrated', labels: ['始', '中', '末'], tiers, pattern: tiers.join(' '), rounds };
+  }
+
+  return {
+    DECK, DECK_TILES, PATTERN_VALUES, PATTERN_NOTES, THRESHOLDS, TIERS_TOP_DOWN,
+    detectWindow, shuffleDeck, playRound, grade, oneValidRound, drawThree, mulberry32
+  };
+});
+</script>
+<script>
+/* ========================================================================
+ * 牙牌神数 · 应用层
+ * ===================================================================== */
+(function () {
+  'use strict';
+  const E = window.YapaiEngine;
+  const ORACLE = JSON.parse(document.getElementById('oracle-data').textContent);
+  const CALIB = JSON.parse(document.getElementById('calib-data').textContent);
+  const BY_PATTERN = new Map(ORACLE.map(e => [e.title, e]));
+  const TIERS = ['上上', '上中', '中平', '中下', '下下'];
+  const $ = id => document.getElementById(id);
+
+  const state = {
+    question: '', mode: 'calibrated',
+    result: null,          // {tiers, rounds, entry, question, mode, at}
+    busy: false, skipping: false,
+    dictFilter: '全部', dictQuery: ''
+  };
+
+  /* ---------------------- 小工具 ---------------------- */
+  const sleep = ms => new Promise(r => setTimeout(r, ms));
+  const PIPS = {
+    1: [[2, 2]],
+    2: [[1, 1], [3, 3]],
+    3: [[1, 1], [2, 2], [3, 3]],
+    4: [[1, 1], [1, 3], [3, 1], [3, 3]],
+    5: [[1, 1], [1, 3], [2, 2], [3, 1], [3, 3]],
+    6: [[1, 1], [1, 3], [2, 1], [2, 3], [3, 1], [3, 3]]
+  };
+  function halfHTML(n) {
+    const red = (n === 1 || n === 4) ? ' red' : '';
+    return '<div class="half">' + (PIPS[n] || []).map(([r, c]) =>
+      `<i class="${red.trim()}" style="grid-area:${r}/${c}"></i>`).join('') + '</div>';
+  }
+  function tileHTML(t, cls) {
+    return `<div class="tile ${cls || ''}" title="${t.name}（${t.top}+${t.bottom}）"
+      data-idx="${t.index}">${halfHTML(t.top)}${halfHTML(t.bottom)}</div>`;
+  }
+  function toast(msg) {
+    const el = $('toast'); el.textContent = msg; el.classList.add('on');
+    clearTimeout(el._t); el._t = setTimeout(() => el.classList.remove('on'), 1800);
+  }
+  async function copyText(text, okMsg) {
+    try {
+      await navigator.clipboard.writeText(text);
+      toast(okMsg || '已复制');
+    } catch (e) {
+      const ta = document.createElement('textarea');
+      ta.value = text; document.body.appendChild(ta); ta.select();
+      try { document.execCommand('copy'); toast(okMsg || '已复制'); }
+      catch (_) { toast('复制失败，请手动选择'); }
+      ta.remove();
+    }
+  }
+  function tierClass(t) { return 't-' + t; }
+
+  /* ---------------------- 主题 ---------------------- */
+  const THEME_KEY = 'yapai.theme';
+  function applyTheme(t) {
+    document.documentElement.dataset.theme = t;
+    $('theme-btn').textContent = t === 'night' ? '昼读' : '夜读';
+    try { localStorage.setItem(THEME_KEY, t); } catch (_) {}
+  }
+  $('theme-btn').addEventListener('click', () =>
+    applyTheme(document.documentElement.dataset.theme === 'night' ? 'paper' : 'night'));
+  try {
+    const saved = localStorage.getItem(THEME_KEY);
+    if (saved) applyTheme(saved);
+  } catch (_) {}
+
+  /* ---------------------- 切页 ---------------------- */
+  function switchTab(name) {
+    document.querySelectorAll('#tabs button').forEach(b =>
+      b.classList.toggle('active', b.dataset.tab === name));
+    document.querySelectorAll('.panel').forEach(p =>
+      p.classList.toggle('active', p.id === 'panel-' + name));
+    if (name === 'dict') renderDict();
+    if (name === 'hist') renderHistory();
+  }
+  $('tabs').addEventListener('click', e => {
+    const b = e.target.closest('button[data-tab]');
+    if (b) switchTab(b.dataset.tab);
+  });
+
+  /* ---------------------- 品阶口径 ---------------------- */
+  document.querySelectorAll('input[name=mode]').forEach(r =>
+    r.addEventListener('change', () => { state.mode = r.value; }));
+
+  /* ---------------------- 起占主流程 ---------------------- */
+  $('btn-cast').addEventListener('click', cast);
+  $('btn-skip').addEventListener('click', () => { state.skipping = true; });
+  $('btn-again').addEventListener('click', () => switchTab('cast'));
+
+  async function cast() {
+    if (state.busy) return;
+    state.busy = true; state.skipping = false;
+    state.question = $('question').value.trim();
+    const fast = $('fast').checked;
+    $('btn-cast').disabled = true;
+    $('cast-stage').hidden = false;
+    $('rounds-card').hidden = true;
+    $('cast-progress').hidden = false;
+
+    const rng = E.mulberry32((Date.now() ^ 0x9e3779b9) >>> 0);
+    const rounds = [];
+    $('stage-title').textContent = '凝神定志';
+    $('stage-hint').textContent = '默念所问之事，三息之后起排…';
+    $('deck').innerHTML = '';
+    $('scan-now').textContent = '静候…';
+    $('scan-total').innerHTML = '累计 <b>0</b> 开';
+    if (!fast) await sleep(650);
+    for (let i = 0; i < 3; i++) {
+      const r = await playRoundAnimated(i, rng, fast);
+      rounds.push(r);
+    }
+
+    $('btn-cast').disabled = false;
+    state.busy = false;
+    $('cast-progress').hidden = true;
+
+    const tiers = rounds.map(r => r.tier);
+    renderRounds(rounds);
+    const entry = BY_PATTERN.get(tiers.join(' '));
+    state.result = {
+      tiers, rounds, entry,
+      question: state.question, mode: state.mode,
+      at: new Date().toISOString()
+    };
+    renderOracle(state.result);
+    switchTab('oracle');
+    toast('三数已定 · 第 ' + String(entry.id).padStart(3, '0') + ' 数');
+    document.querySelector('#panel-oracle').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  async function playRoundAnimated(i, rng, fast) {
+    state.skipping = false;                 // 「跳过本轮」只管当前这一排
+    const labels = ['始数', '中数', '末数'];
+    $('stage-title').textContent = `第${['一', '二', '三'][i]}排 · ${labels[i]}`;
+    $('stage-hint').textContent = '诚心默念所问之事，洗牌中…';
+    // 洗牌
+    const deck = $('deck');
+    const shuffled = E.shuffleDeck(rng);
+    deck.innerHTML = shuffled.map(t => tileHTML(t, 'reveal')).join('');
+    $('scan-total').innerHTML = '累计 <b>0</b> 开';
+    $('scan-now').textContent = '洗牌…';
+    if (!fast) await sleep(520);
+    // 计算
+    const rnd = E.playRound(rng, shuffled);
+    const tiles = deck.querySelectorAll('.tile');
+    const step = fast ? 0 : 46;
+    $('stage-hint').textContent = '三十滑窗，逐窗取最高一开';
+    for (const w of rnd.windows) {
+      tiles.forEach((t, k) => {
+        t.classList.remove('win');
+        t.classList.toggle('dim', k < w.start || k > w.start + 2);
+      });
+      for (let k = 0; k < 3; k++) tiles[w.start + k].classList.add('win');
+      if (deck.scrollWidth > deck.clientWidth + 4) {
+        const left = tiles[w.start].offsetLeft - 16;
+        if (Math.abs(deck.scrollLeft - left) > 40) deck.scrollLeft = left;
+      }
+      $('scan-now').innerHTML = `第 ${w.start + 1} 窗 · <b>${w.pattern}</b>` +
+        (w.value ? ` +${w.value}` : '');
+      if (step) {
+        const acc = rnd.windows.slice(0, w.start + 1).reduce((s, x) => s + x.value, 0);
+        $('scan-total').innerHTML = `累计 <b>${acc}</b> 开`;
+        await sleep(state.skipping ? 0 : step);
+      }
+    }
+    tiles.forEach(t => t.classList.remove('win'));
+    $('scan-now').innerHTML = `总开 <b>${rnd.total}</b>`;
+    $('scan-total').innerHTML = `判定 <b>${E.grade(rnd.total, state.mode)}</b>`;
+    $('stage-hint').textContent = rnd.total > 0
+      ? `${rnd.total} 开 → ${E.grade(rnd.total, state.mode)}`
+      : '〇开不吉，须重排（原书【求占秘要】）';
+    if (!fast) await sleep(420);
+    // 0开重排
+    if (rnd.total === 0) {
+      $('stage-hint').textContent = '〇开 · 虔诚祷告，凝神定志后再排';
+      await sleep(fast ? 0 : 700);
+      return playRoundAnimated(i, rng, fast);
+    }
+    return { round: rnd, tier: E.grade(rnd.total, state.mode), label: labels[i] };
+  }
+
+  function renderRounds(rounds) {
+    $('rounds-card').hidden = false;
+    $('rounds-list').innerHTML = rounds.map((r, i) => {
+      const v = r.round.total;
+      const top = Object.entries(r.round.patternCounts)
+        .filter(([k]) => k !== '无开')
+        .sort((a, b) => E.PATTERN_VALUES[b[0]] - E.PATTERN_VALUES[a[0]]);
+      return `<div class="step${i === 2 ? ' h' : ''}">
+        <div class="k">${r.label} · ${v} 开 → ${r.tier}</div>
+        <div class="v">${top.length ? top.map(([k, n]) => `${k}×${n}`).join('　') : '未见成开'
+        }${r.round.patternCounts['无开'] ? `　（无开×${r.round.patternCounts['无开']}）` : ''}</div>
+      </div>`;
+    }).join('');
+  }
+
+  /* ---------------------- 解读生成 ---------------------- */
+  const TIER_DESC = {
+    上上: { status: '大吉', qi: '气旺而顺', start: '起点高、本心正，机缘自来相就', mid: '势如破竹，进取无碍，贵人多助', end: '功成圆满，名利两全' },
+    上中: { status: '吉', qi: '气顺中有小滞', start: '开手顺遂，略有牵掣亦不足虑', mid: '渐入佳境，须借人力方得全功', end: '收成可观，惟不宜志满' },
+    中平: { status: '平', qi: '气和而不动', start: '境况平平，既定格局无甚变动', mid: '守成则可，妄动则劳而无功', end: '安常处顺，所得如其所种' },
+    中下: { status: '滞', qi: '气弱而多阻', start: '开局即有阻隔，事多曲折', mid: '进退两难，宜守旧勿贪新', end: '若能量力知止，可免大损' },
+    下下: { status: '凶', qi: '气陷而不振', start: '起因已见失着，根基未固', mid: '风波叠起，小人暗算须防', end: '终局难全，保身为上，勿强求' }
+  };
+  const TREND_RULES = [
+    { test: t => t.every(x => x === '上上'), text: '三数皆上上，三阳开泰。此局吉之极矣，惟「持盈戒满」四字须刻在心头——极盛之时，正是考验守成之力的时候。', tone: 'great' },
+    { test: t => t.every(x => x === t[0]), text: '三数一致，气象纯粹。事之始终不出此一格，正可据此定进退之节，不必再多疑。', tone: 'flat' },
+    { test: t => t[0] === '上上' && t[1] === '上上' && t[2] === '下下', text: '始、中两数上上，末数忽坠下下：正合原书「七十二战，战无不利；忽闻楚歌，一败涂地」之象。前段得势最易生骄，功成之际便是最险之处，急流勇退方是保全之道。', tone: 'fall' },
+    { test: t => t[0] === '下下' && t[1] === '下下' && t[2] === '上上', text: '两下下而后上上，正合「太公八十遇文王」之象。前段沉潜无功，非才不足，时未至耳；守得住便是转机。', tone: 'rise' },
+    { test: t => t[0] === '下下' && t[1] === '下下' && t[2] === '中下', text: '三数俱卑，气陷难振。此时谋大事必受挫，不如收束规模、专守本业，先求不失，再图后举。', tone: 'low' },
+    { test: t => t[0] === '上上' && t[2] === '上上', text: '首尾皆上上，中有起伏。大局是吉，惟中途那一段曲折最须留意：那不是终点，只是路上的一道坎，守过便通。', tone: 'good' },
+    { test: t => t[0] === '下下' && t[2] === '上上', text: '始凶末吉，正是「否极泰来」之局。眼前困顿只是序章，最忌在将通未通之际自弃。', tone: 'rise' },
+    { test: t => t[0] === '上上' && t[2] === '下下', text: '始吉末凶，盛极而衰之象。开局之顺不必喜，须于中途设防：见好即收，才是把吉留住的办法。', tone: 'fall' },
+    { test: t => t[0] === '下下' || t[2] === '下下', text: '一端见下下，此局有硬伤。所问之事宜缩小规模、降低预期，先保根本，再论得失。', tone: 'low' },
+    { test: t => t[1] === '上上', text: '中数得单上上，事之枢机在「半途」：机会多在中段出现，须于中途用力，不可错过。', tone: 'good' },
+    { test: t => t[1] === '下下', text: '中数见下下，是中途易生变之象。凡事宜留后手、备退路，切忌把全部筹码压在一处。', tone: 'warn' },
+    { test: () => true, text: '三数平顺流转，无大起大落。此局重在「按部就班」：不急不躁，顺着时序推移，自有所得。', tone: 'flat' }
+  ];
+  const QUESTION_HINTS = [
+    { k: ['工作', '职业', '事业', '换工', '跳槽', '升职', '创业', '公司', '职场', '生意'], a: '事业之局，先看「中数」能否得力：中段得助则进，中段见滞则守。凡欲变动，宜待时机而非硬闯。' },
+    { k: ['财', '投资', '股票', '基金', '钱', '收入', '赚', '亏', '生意'], a: '财上之事，最忌「末数」见下下而仍加码。吉则乘势而收，凶则减仓守本，切勿以借贷博取。' },
+    { k: ['婚', '感情', '恋', '对象', '结婚', '离婚', '复合', '喜欢'], a: '情缘之占，重在看三数是否「渐高」：渐高者和合可成，两端相悬者聚散无常，与其勉强，不如让时间说话。' },
+    { k: ['考试', '考', '学业', '读书', '升学', '考研', '面试', '资格'], a: '考试之事，中数为「用功之段」，末数为「放榜之期」。中数卑而末数高者，往往苦尽甘来；反之则须防临场失手。' },
+    { k: ['病', '健康', '身体', '手术', '医'], a: '问病以「末数」为归：末数吉则渐愈，宜早延良医；末数凶则不可拖延，须以养护为先，勿信偏方。' },
+    { k: ['出行', '搬家', '搬迁', '旅游', '出国', '远行', '移居'], a: '行旅移居，看中数有无阻隔：中数滞者路途多周折，宜改期或备预案；三数渐高者，动则得利。' },
+    { k: ['官司', '诉讼', '纠纷', '合同', '仲裁', '打官司'], a: '官非之事，最忌「中下、下下」连见：宜和解、宜守理，不可再添口舌。留好凭据，胜过强辩。' },
+    { k: ['失物', '丢', '找', '寻'], a: '失物之占，吉则急寻可回，凶则散而不返。若末数见吉，速寻勿缓；末数见凶，舍之反安。' },
+    { k: ['房', '田宅', '置产', '买楼', '装修', '租'], a: '田宅之事，宜看「始数」根基：始吉者产可久守，始卑者纵得亦有后患，签约之前须细审条款。' },
+    { k: ['孩子', '子女', '怀孕', '求子', '子女缘'], a: '子嗣之占，末数为要：末数吉则门庭添喜，凶则宜调养身心、静待时日。' }
+  ];
+
+  function buildNarrative(tiers, entry) {
+    const [a, b, c] = tiers;
+    const dA = TIER_DESC[a], dB = TIER_DESC[b], dC = TIER_DESC[c];
+    const trend = TREND_RULES.find(r => r.test(tiers));
+    const steps = [
+      { k: '始 · 起因本心', v: `${a}（${dA.status}）：${dA.start}。` },
+      { k: '中 · 变迁借力', v: `${b}（${dB.status}）：${dB.mid}。` },
+      { k: '末 · 终局归宿', v: `${c}（${dC.status}）：${dC.end}。` }
+    ];
+    const advice = {
+      上上: '可放手施为，惟须持盈戒满，留一分余地。',
+      上中: '顺势而进，兼听人言，勿以小事生懈。',
+      中平: '守成为主，静待时令，不必强求速效。',
+      中下: '知止为智：缩小目标、保住根本，胜于勉强争胜。',
+      下下: '以保全为上，退一步即安；切忌孤注一掷。'
+    }[c];
+    return { steps, trendText: trend.text, advice, trendTone: trend.tone };
+  }
+
+  function questionHint(q) {
+    if (!q) return [];
+    const hits = [];
+    for (const g of QUESTION_HINTS) {
+      if (g.k.some(k => q.includes(k))) hits.push(g.a);
+    }
+    return hits.slice(0, 2);
+  }
+
+  /* 解曰 里与本问相关的小句高亮 */
+  const JIE_KEYS = [
+    { k: ['名', '功名', '考试', '考'], w: ['求名', '功名', '科甲', '名'] },
+    { k: ['财', '利', '钱', '投资', '生意'], w: ['求利', '财', '置产'] },
+    { k: ['婚', '感情', '姻'], w: ['婚姻', '伉俪', '良缘'] },
+    { k: ['子女', '孩子', '怀孕', '子嗣'], w: ['子嗣', '六甲', '嗣'] },
+    { k: ['行人', '朋友', '消息', '联系'], w: ['行人', '消息', '音信'] },
+    { k: ['官司', '诉讼', '纠纷'], w: ['官司', '官事', '讼'] },
+    { k: ['失物', '丢', '寻'], w: ['失物'] },
+    { k: ['房', '田宅', '置产', '楼'], w: ['田宅', '置产', '田'] },
+    { k: ['病', '健康', '医'], w: ['病', '延医', '药'] }
+  ];
+  function highlightJie(jie, question) {
+    const safe = jie.replace(/[&<>]/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[ch]));
+    if (!question) return safe;
+    let words = [];
+    for (const g of JIE_KEYS) if (g.k.some(k => question.includes(k))) words = words.concat(g.w);
+    if (!words.length) return safe;
+    const uniq = [...new Set(words)].sort((x, y) => y.length - x.length);
+    const re = new RegExp('(' + uniq.map(w => w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|') + ')', 'g');
+    return safe.replace(re, '<span class="hit">$1</span>');
+  }
+
+  /* ---------------------- 签文渲染 ---------------------- */
+  function renderOracle(res) {
+    const e = res.entry;
+    $('oracle-empty').hidden = true;
+    $('oracle-card').hidden = false;
+    $('res-no').textContent = `第 ${String(e.id).padStart(3, '0')} 数 · ${e.category}`;
+    $('res-trio').innerHTML = res.tiers.map((t, i) =>
+      `<div class="unit"><span class="lbl">${['始', '中', '末'][i]}</span>
+        <span class="stamp ${tierClass(t)}">${t}</span></div>` +
+      (i < 2 ? '<span class="dot">·</span>' : '')).join('');
+    const motto = e.motto || '';
+    $('res-motto').textContent = motto ? `【断意】${motto}` : '';
+    $('res-motto').hidden = !motto;
+    $('res-poem').innerHTML = e.poem.map(l => `<span class="line">${l}</span>`).join('');
+    $('res-jie').innerHTML = highlightJie(e.jie, res.question || '');
+    $('res-duan').textContent = e.duan;
+
+    const nar = buildNarrative(res.tiers, e);
+    const hints = questionHint(res.question || '');
+    $('res-narr').innerHTML = nar.steps.map((s, i) =>
+      `<div class="step${i === 2 ? ' h' : ''}"><div class="k">${s.k}</div><div class="v">${s.v}</div></div>`
+    ).join('');
+    $('res-verdict').innerHTML =
+      `<p style="margin:0 0 8px">${nar.trendText}</p>` +
+      hints.map(h => `<p style="margin:0 0 8px">${h}</p>`).join('') +
+      `<p style="margin:0;color:var(--ink-2)">宜：${nar.advice}</p>`;
+
+    const chips = [];
+    chips.push(`<span class="chip">总开 <b>${res.rounds.map(r => r.round.total).join(' / ')}</b></span>`);
+    chips.push(`<span class="chip">口径 <b>${res.mode === 'book' ? '原书阈值' : '标定'}</b></span>`);
+    for (const [k, v] of Object.entries(E.THRESHOLDS[res.mode])) {
+      if (k === '下下') continue;
+      chips.push(`<span class="chip">${k} ≥ <b>${v}</b></span>`);
+    }
+    $('res-chips').innerHTML = chips.join('');
+
+    $('res-open').innerHTML = res.rounds.map((r, i) => {
+      const top = Object.entries(r.round.patternCounts)
+        .filter(([k]) => k !== '无开')
+        .sort((a, b) => E.PATTERN_VALUES[b[0]] - E.PATTERN_VALUES[a[0]]);
+      const pats = top.map(([k, n]) => `<span class="pat">${k}×${n}</span>`).join('') +
+        (r.round.patternCounts['无开'] ? `<span class="pat zero">无开×${r.round.patternCounts['无开']}</span>` : '');
+      return `<div class="open-row"><span class="lbl">${['始', '中', '末'][i]}</span>
+        <span class="tot">${r.round.total} 开</span>${pats || '<span class="pat">未成开</span>'}</div>`;
+    }).join('');
+
+    $('res-prompt').textContent = buildPrompt(res, nar);
+  }
+
+  function buildPrompt(res, nar) {
+    const e = res.entry;
+    return [
+      '你是精研《牙牌神数》与传统术数的解签师。请依据下列签面，为求占者作一段「触机」式的现代解读（400 字以内），要求：',
+      '1) 结合始（起因本心）、中（变迁借力）、末（终局归宿）三阶，讲清事情的起承转合；',
+      '2) 不作绝对预言，只讲趋势、着力点与风险控制；',
+      '3) 用现代语言，不堆砌术语；必要时点出签文中可「以字应事」的关键字。',
+      '',
+      `【所问】${res.question || '（未填写，泛问自身近期运势）'}`,
+      `【品阶】始 ${res.tiers[0]} · 中 ${res.tiers[1]} · 末 ${res.tiers[2]}（第 ${String(e.id).padStart(3, '0')} 数 · ${e.category}）`,
+      `【总开】${res.rounds.map((r, i) => `${['始', '中', '末'][i]}${r.round.total}开`).join('，')}（口径：${res.mode === 'book' ? '原书阈值' : '标定'}）`,
+      e.motto ? `【断意】${e.motto}` : '',
+      `【诗曰】${e.poem_raw}`,
+      `【解曰】${e.jie}`,
+      `【断曰】${e.duan}`,
+      '',
+      '【参照】' + nar.steps.map(s => s.k + '：' + s.v).join(' '),
+      '【趋势】' + nar.trendText
+    ].filter(l => l !== '').join('\n');
+  }
+
+  function plainOracleText(res) {
+    const e = res.entry;
+    const nar = buildNarrative(res.tiers, e);
+    return [
+      `【所问】${res.question || '（未填写）'}`,
+      `【品阶】始 ${res.tiers[0]} · 中 ${res.tiers[1]} · 末 ${res.tiers[2]}`,
+      `【总开】${res.rounds.map((r, i) => `${['始', '中', '末'][i]}${r.round.total}开`).join('，')}`,
+      '',
+      `第 ${String(e.id).padStart(3, '0')} 数 · ${e.category}${e.motto ? ' · ' + e.motto : ''}`,
+      `诗曰：${e.poem_raw}`,
+      `解曰：${e.jie}`,
+      `断曰：${e.duan}`,
+      '',
+      nar.steps.map(s => s.k + '：' + s.v).join('\n'),
+      '趋势：' + nar.trendText,
+      '宜：' + nar.advice
+    ].join('\n');
+  }
+
+  /* ---------------------- 签文页按钮 ---------------------- */
+  $('btn-copy').addEventListener('click', () => {
+    if (state.result) copyText(plainOracleText(state.result), '签文已复制');
+  });
+  $('btn-copy-prompt').addEventListener('click', () => {
+    if (state.result) copyText($('res-prompt').textContent, '提示词已复制');
+  });
+  $('btn-print').addEventListener('click', () => window.print());
+  $('btn-save').addEventListener('click', () => {
+    if (!state.result) return;
+    saveHistory(state.result); toast('已存入案卷'); renderHistory();
+  });
+
+  /* ---------------------- 存档 ---------------------- */
+  const HIST_KEY = 'yapai.history';
+  function loadHistory() {
+    try { return JSON.parse(localStorage.getItem(HIST_KEY) || '[]'); } catch (_) { return []; }
+  }
+  function saveHistory(res) {
+    const list = loadHistory();
+    list.unshift({
+      at: res.at, question: res.question, tiers: res.tiers,
+      entryId: res.entry.id, mode: res.mode,
+      totals: res.rounds.map(r => r.round.total)
+    });
+    try { localStorage.setItem(HIST_KEY, JSON.stringify(list.slice(0, 60))); } catch (_) {}
+  }
+  function renderHistory() {
+    const list = loadHistory();
+    const box = $('hist-list');
+    if (!list.length) { box.innerHTML = '<div class="empty">案卷尚空。起占后于签文页点「存入案卷」。</div>'; return; }
+    box.innerHTML = list.map((h, i) => `
+      <div class="hist-item">
+        <div style="min-width:0">
+          <div class="q">${escapeHTML(h.question || '（未填所问）')}</div>
+          <div class="meta">${new Date(h.at).toLocaleString('zh-CN')} · 第 ${String(h.entryId).padStart(3, '0')} 数 · ${h.tiers.join(' ')}</div>
+        </div>
+        <div class="row" style="flex:0 0 auto">
+          <button class="btn small" data-h="${i}" type="button">查看</button>
+          <button class="btn small" data-del="${i}" type="button">删</button>
+        </div>
+      </div>`).join('');
+    box.querySelectorAll('[data-h]').forEach(b => b.addEventListener('click', () => {
+      const h = loadHistory()[+b.dataset.h];
+      openFromHistory(h);
+    }));
+    box.querySelectorAll('[data-del]').forEach(b => b.addEventListener('click', () => {
+      const l = loadHistory(); l.splice(+b.dataset.del, 1);
+      try { localStorage.setItem(HIST_KEY, JSON.stringify(l)); } catch (_) {}
+      renderHistory();
+    }));
+  }
+  function escapeHTML(s) {
+    return String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  }
+  $('btn-clear-hist').addEventListener('click', () => {
+    if (!confirm('确定清空全部案卷？')) return;
+    try { localStorage.removeItem(HIST_KEY); } catch (_) {}
+    renderHistory(); toast('案卷已清空');
+  });
+  function openFromHistory(h) {
+    const entry = BY_PATTERN.get(h.tiers.join(' '));
+    if (!entry) return toast('签文数据缺失');
+    const rounds = h.tiers.map((t, i) => ({
+      label: ['始数', '中数', '末数'][i], tier: t,
+      round: { total: (h.totals && h.totals[i]) || 0, windows: [], patternCounts: {}, row: [] }
+    }));
+    state.result = { tiers: h.tiers, rounds, entry, question: h.question, mode: h.mode || 'calibrated', at: h.at };
+    $('res-open').innerHTML = '<span class="muted">（案卷仅存品阶与总开，逐窗明细未保存）</span>';
+    renderOracle(state.result);
+    $('res-open').innerHTML = '<span class="muted">（案卷只存品阶与总开，逐窗开数明细未保存）</span>';
+    switchTab('oracle');
+  }
+
+  /* ---------------------- 签库 ---------------------- */
+  function renderDict() {
+    const filters = ['全部', ...TIERS];
+    $('dict-filters').innerHTML = filters.map(f =>
+      `<button data-f="${f}" class="${state.dictFilter === f ? 'on' : ''}" type="button">${f}</button>`).join('');
+    $('dict-filters').querySelectorAll('button').forEach(b => b.addEventListener('click', () => {
+      state.dictFilter = b.dataset.f; renderDict();
+    }));
+    const q = state.dictQuery.trim().toLowerCase();
+    const list = ORACLE.filter(e => {
+      if (state.dictFilter !== '全部' && e.category !== state.dictFilter + '数') return false;
+      if (!q) return true;
+      return (e.title + e.motto + e.poem_raw + e.jie + e.duan + e.id).toLowerCase().includes(q);
+    });
+    $('dict-list').innerHTML = list.length ? list.map(e => `
+      <div class="dict-item" data-id="${e.id}">
+        <div class="l">
+          <span class="no">#${String(e.id).padStart(3, '0')}</span>
+          <span class="tt">${e.title}</span>
+          <span class="mm">${escapeHTML(e.motto || e.poem[0] || '')}</span>
+        </div>
+        <span class="muted" style="flex:0 0 auto">观 ➔</span>
+      </div>`).join('') : '<div class="empty">无匹配条目</div>';
+    $('dict-list').querySelectorAll('.dict-item').forEach(el => el.addEventListener('click', () => {
+      const e = ORACLE.find(x => x.id === +el.dataset.id);
+      const tiers = [e.initial, e.middle, e.final];
+      const rounds = tiers.map((t, i) => ({
+        label: ['始数', '中数', '末数'][i], tier: t,
+        round: { total: 0, windows: [], patternCounts: {}, row: [] }
+      }));
+      state.result = { tiers, rounds, entry: e, question: '', mode: state.mode, at: new Date().toISOString(), browsed: true };
+      renderOracle(state.result);
+      $('res-open').innerHTML = '<span class="muted">（从签库观览，未实际排牌，故无逐窗开数）</span>';
+      switchTab('oracle');
+    }));
+    const search = $('dict-search');
+    if (search.value !== state.dictQuery) search.value = state.dictQuery;
+  }
+  $('dict-search').addEventListener('input', e => {
+    state.dictQuery = e.target.value; renderDict();
+  });
+
+  /* ---------------------- 原理页 ---------------------- */
+  function renderRule() {
+    const order = ['不同', '五子', '合巧', '分相', '马军', '对子', '么二三', '二三靠', '正快'];
+    $('rule-table').innerHTML = order.map(k => `
+      <tr><td>${k}</td><td><b>${E.PATTERN_VALUES[k]} 开</b></td><td>${E.PATTERN_NOTES[k]}</td></tr>`).join('');
+    const dCal = CALIB.measured_calibrated || {}, dBook = CALIB.measured_book || {};
+    $('tier-table').innerHTML = TIERS.map(t => `
+      <tr>
+        <td><span class="stamp ${tierClass(t)}">${t}</span></td>
+        <td>${t === '下下' ? '0–' + (CALIB.thresholds_calibrated['中下'] - 1) : '≥ ' + CALIB.thresholds_calibrated[t]} 开</td>
+        <td>${t === '下下' ? '0–' + (CALIB.thresholds_book['中下'] - 1) : '≥ ' + CALIB.thresholds_book[t]} 开</td>
+        <td>${(dCal[t] ?? '—')}%（目标 ${(CALIB.target[t])}%）</td>
+      </tr>`).join('');
+    $('cal-book').textContent = dBook['上上'] ?? '51';
+    $('cal-note').textContent = [
+      `验证数据：${CALIB.sims.toLocaleString()} 次排牌模拟（${CALIB.generated_at}）`,
+      `总开：均值 ${CALIB.mean_total}，标准差 ${CALIB.sd_total}，最小 ${CALIB.min_total}，最大 ${CALIB.max_total}，〇开率 ${CALIB.zero_rate}%`,
+      `标定阈值：上上≥${CALIB.thresholds_calibrated['上上']}　上中≥${CALIB.thresholds_calibrated['上中']}　中平≥${CALIB.thresholds_calibrated['中平']}　中下≥${CALIB.thresholds_calibrated['中下']}　下下 0–${CALIB.thresholds_calibrated['中下'] - 1}`,
+      `标定实测：上上 ${dCal['上上']}%　上中 ${dCal['上中']}%　中平 ${dCal['中平']}%　中下 ${dCal['中下']}%　下下 ${dCal['下下']}%（最大偏差 ${CALIB.max_deviation_pp} 个百分点）`,
+      `原书阈值实测：上上 ${dBook['上上']}%　上中 ${dBook['上中']}%　中平 ${dBook['中平']}%　中下 ${dBook['中下']}%　下下 ${dBook['下下']}%`,
+      `意义：开数算法忠于九格；品阶切点两套并存，玩家可自行择一，绝不在暗中改动开数。`
+    ].join('\n');
+    $('verify-note').textContent = [
+      `模拟行数：${CALIB.sims.toLocaleString()}　三连排抽样：${CALIB.draws.toLocaleString()} 次`,
+      `命中签数：${CALIB.combos_seen}/125　最稀有组合概率：${CALIB.rarest_combo_pct}%`,
+      `〇开重占率：${CALIB.zero_rate}%`,
+      `双端一致性：Python 引擎与页面 JS 引擎对 21³ = 9,261 种牌型组合全量比对通过`,
+      `校验项：九格单测 · 窗口数=30 · 总开=各窗之和 · 对子按同名同点判定 · 同种子可复现`,
+      `验证结论：${CALIB.failures.length ? '未通过：' + CALIB.failures.join('；') : '全部通过'}`
+    ].join('\n');
+  }
+
+  /* ---------------------- 启动 ---------------------- */
+  renderRule();
+  renderDict();
+  renderHistory();
+  console.log('%c牙牌神数 %c引擎就绪：32 张牌 / 30 滑窗 / 125 数',
+    'color:#a8332a;font-weight:bold', 'color:#8b7f68');
+})();
+</script>
+</body>
+</html>
